@@ -37,6 +37,7 @@ class ContentController extends Zend_Controller_Action {
         }
         
         $this->view->content = $content;
+        $this->view->form = $form;
     }
     
     public function createAction() {
