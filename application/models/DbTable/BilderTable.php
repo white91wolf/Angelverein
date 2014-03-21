@@ -13,6 +13,5 @@ class Application_Model_DbTable_BilderTable extends Zend_Db_Table_Abstract {
         }  else {
             return null;
         }
-        
     }
 }

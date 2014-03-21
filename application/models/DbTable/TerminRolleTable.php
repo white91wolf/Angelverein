@@ -1,6 +1,6 @@
 <?php
 
-class Application_Model_DbTable_Termin_RolleTable extends Zend_Db_Table_Abstract {
+class Application_Model_DbTable_TerminRolleTable extends Zend_Db_Table_Abstract {
 
     protected $_name = "termin_rolle";
 

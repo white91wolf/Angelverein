@@ -5,14 +5,14 @@ class Application_Model_DbTable_ArbeitsdienstTable extends Zend_Db_Table_Abstrac
     protected $_name = "arbeitsdienst";
 
     public function getAllByUserId($userid = null) {
+        $rows = null;
+        
         if ($userid != null) {
             $select = $this->select()->where('user_id = ?', $userid);
             $rows = $this->fetchAll($select);
-
-            return $rows;
-        } else {
-            return null;
-        }
+        } 
+        
+        return $rows;
     }
 
     public function getAllNotConfirmed() {
