@@ -8,7 +8,11 @@ class Application_Model_DbTable_ContentTable extends Zend_Db_Table_Abstract {
         $rows = null;
         
         if ($id != null) {
-            $rows = $this->find($id);            
+            $rows = $this->find($id); 
+            
+            if(!empty($rows)) {
+                $rows = $rows->current();
+            }
         } 
         
         return $rows;
@@ -46,9 +50,9 @@ class Application_Model_DbTable_ContentTable extends Zend_Db_Table_Abstract {
         $key = $this->insert(
                 array(
                     'headline' => $headline,
-                    'content' => $content,
-                    'user_id' => $user_id,
-                    'type_id' => $type_id,
+                    'text' => $content,
+                    'user_id' => (int)$user_id,
+                    'type_id' => (int)$type_id,
                     'date' => $date
                 )
         );

@@ -4,6 +4,8 @@ class Application_Model_Forms_ContentForm extends Zend_Form {
     public function init(){
         $this->setMethod('post');
 
+        //TODO type_id fehlt - überlegung ob hidden oder doch änderbar was aber nicht ganz so cool wäre wenn ein newsartikel zur seite wird usw.
+        
         $headline = new Zend_Form_Element_Text('headline', array(
             'label' => 'Titel',
             'required' => true

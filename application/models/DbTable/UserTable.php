@@ -1,6 +1,5 @@
 <?php
 
-// TODO Passt die Klasse noch zur neuen Tabelle?
 class Application_Model_DbTable_UserTable extends Zend_Db_Table_Abstract {
 
     protected $_name = "user";
