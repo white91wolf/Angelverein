@@ -9,17 +9,16 @@ class Application_Model_DbTable_TerminUserTable extends Zend_Db_Table_Abstract {
 
         return $rows;
     }
-    
-    public function getAllUsersByTerminId($termin_id = null) {
-        if($termin_id != null){
-            $select = $this->select()->where('termin_id = ?', $termin_id);
-            $rows = $this->fetchAll($select);
 
-            return $rows;
-        }  else {
-            return null;
+    public function getAllUsersByTerminId($termin_id = null) {
+        $rows = null;
+        
+        if (!empty($termin_id)) {
+            $select = $this->select()->where('termin_id = ?', (int)$termin_id);
+            $rows = $this->fetchAll($select);
         }
         
+        return $rows;
     }
 
 }

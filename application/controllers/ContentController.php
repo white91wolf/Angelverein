@@ -1,12 +1,10 @@
 <?php
 
 class ContentController extends Zend_Controller_Action {
-
     protected $contentTable;
     protected $contentTypeTable;
 
     public function init() {
-        /* Initialize action controller here */
         $this->contentTable = new Application_Model_DbTable_ContentTable();
         $this->contentTypeTable = new Application_Model_DbTable_ContentTypeTable();
     }
@@ -20,17 +18,32 @@ class ContentController extends Zend_Controller_Action {
         $content = null;
 
         if ($request->isGet() || $request->isPost()) {
-            $contentid = $request->getParam('contentid');
-            $content = $this->contentTable->getEntryById($contentid);
+            $contentid = (int)$request->getParam('contentid');
             
-            $form = new Application_Model_Forms_ContentForm();
-            
-            if ($request->isGet() && $request->isPost() && $form->isValid($_POST)) {
-                //$content
+            // pruefe ob contentid korrekt gesetzt wurde
+            // empty == true wenn id = 0 - ist hier in Ordnung, da ids bei 1 anfangen
+            if(!empty($contentid)) {
+                $content = $this->contentTable->getEntryById($contentid);
+                
+                // pruefen ob zu der ID ueberhaupt content existiert
+                if(!empty($content)) {
+                    $form = new Application_Model_Forms_ContentForm();
+
+                    if ($request->isGet() && $request->isPost() && $form->isValid($_POST)) {
+                        // Content updaten
+                    }
+                }
             }
         }
         
         $this->view->content = $content;
     }
-
+    
+    public function createAction() {
+        $request = $this->getRequest();
+        
+        if($request->isGet() && $request->isPost()) {
+            
+        }
+    }
 }
