@@ -3,6 +3,20 @@
 class Application_Model_DbTable_UserTable extends Zend_Db_Table_Abstract {
 
     protected $_name = "user";
+    
+    
+    public function createUser($username, $password, $vname, $nachname, $email ){
+        $key = $this->insert(
+                array(
+                    'username' => $username,
+                    'vorname' => $vname,
+                    'nachname' => $nachname,
+                    'password' => $password,
+                    'email' => $email
+                )
+            );
+            return $key;
+    }
 
     public function getUserByName($name = null) {
         $rows = null;

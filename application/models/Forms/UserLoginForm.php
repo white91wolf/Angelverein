@@ -1,7 +1,8 @@
 <?php
 
-class Application_Model_Forms_ContentForm extends Zend_Form {
-    public function init(){
+class Application_Model_Forms_UserLoginForm extends Zend_Form {
+
+    public function init() {
         $this->setMethod('post');
 
         $headline = new Zend_Form_Element_Text('username', array(
@@ -22,12 +23,18 @@ class Application_Model_Forms_ContentForm extends Zend_Form {
         $this->addElement($text);
 
         //----------------------------------------------------------------------
-        
+
         $submit = new Zend_Form_Element_Submit('submit', array(
             'label' => 'Login')
         );
 
         $this->addElement($submit);
+    }
+
+    public function setRedirectAfterLoginField($path = null) {
+        if ($path != null) {
+            $this->addElement(new Zend_Form_Element_Hidden('redirect_after_login', array('value' => $path)));
+        }
     }
 
 }

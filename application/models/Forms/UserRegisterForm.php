@@ -1,15 +1,33 @@
 <?php
 
-class Application_Model_Forms_ContentForm extends Zend_Form {
+class Application_Model_Forms_UserRegisterForm extends Zend_Form {
     public function init(){
         $this->setMethod('post');
 
-        $headline = new Zend_Form_Element_Text('username', array(
+        $username = new Zend_Form_Element_Text('username', array(
             'label' => 'Username',
             'required' => true
         ));
         $headline->addFilter('StripTags');
-        $this->addElement($headline);
+        $this->addElement($username);
+
+        //----------------------------------------------------------------------
+        
+        $vorname = new Zend_Form_Element_Text('vorname', array(
+            'label' => 'Vorname',
+            'required' => true
+        ));
+        $headline->addFilter('StripTags');
+        $this->addElement($vorname);
+
+        //----------------------------------------------------------------------
+        
+        $nachname = new Zend_Form_Element_Text('nachname', array(
+            'label' => 'Nachname',
+            'required' => true
+        ));
+        $headline->addFilter('StripTags');
+        $this->addElement($nachname);
 
         //----------------------------------------------------------------------
 
