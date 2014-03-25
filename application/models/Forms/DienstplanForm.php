@@ -8,7 +8,9 @@ class Application_Model_Forms_ContentForm extends Zend_Form {
             'label' => 'Datum der Tätigkeit',
             'required' => true
         ));
-        //TODO Filter nur bestimmte html elemente zulassen
+        
+        $date->addFilter('StringTrim');
+        $date->addFilter('StripTags');
         $this->addElement($date);
 
         //----------------------------------------------------------------------
@@ -17,8 +19,8 @@ class Application_Model_Forms_ContentForm extends Zend_Form {
             'label' => 'Beschreibung/Ort der Tätigkeit',
             'required' => true
         ));
-        //TODO Filter nur bestimmte html elemente zulassen
-        $text->addFilter('StipTags');
+       
+        $text->addFilter(new HTMLPurifier_HTMLFilter());
         $this->addElement($text);
 
         //----------------------------------------------------------------------

@@ -13,7 +13,7 @@
 		$text = $this->escape($text);
 	} 
 	
-	$utils = new Series_HTMLUtils($this);
+	$utils = new Utils_HTMLUtils($this);
 ?>
 
 <a <?php echo $utils->attributeList($attributes) ?>><?php echo $text ?></a>

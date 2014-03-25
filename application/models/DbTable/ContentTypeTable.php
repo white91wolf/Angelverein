@@ -8,4 +8,8 @@ class Application_Model_DbTable_ContentTypeTable extends Zend_Db_Table_Abstract 
 
         return $rows->toArray();
     }
+    
+    public function getContentTypeByID($id) {
+        return $this->find((int)$id);
+    } 
 }

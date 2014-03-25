@@ -1,5 +1,5 @@
 <?php
-
+// TODO Linkgeadline fuer Pages
 class ContentController extends Zend_Controller_Action {
 
     protected $contentTable;
@@ -55,24 +55,18 @@ class ContentController extends Zend_Controller_Action {
 
     public function createAction() {
         $request = $this->getRequest();
-        $content = null;
 
-        if ($request->isGet() || $request->isPost()) {
-            $form = new Application_Model_Forms_ContentForm();
-            if ($request->isGet() && $request->isPost() && $form->isValid($_POST)) {
-                $newContentid = $this->contentTable->createNewContent($form->getValue('headline'), $form->getValue('text'), $user_id, $form->getValue('type_id'));
+        $form = new Application_Model_Forms_ContentForm();
+        $type_id = (int) $request->getParam('type_id');
+        
+        if ($request->isGet() && $request->isPost() && !empty($type_id) && $form->isValid($_POST)) {
+            if (!empty($this->contentTypeTable->getContentTypeByID($type_id))) {
+                $newContentid = $this->contentTable->createNewContent($form->getValue('headline'), $form->getValue('text'), $user_id, $type_id);
+                $this->_redirect('content/edit/contentid/' . $newContentid);
             }
-
-            $this->_redirect('content/edit/contentid/' . $newContentid);
         }
 
-        //Form mit daten füllen
-        if (!empty($content)) {
-            $contentArr = $content->toArray();
-            $form->populate($contentArr);
-        }
-
-        $this->view->content = $content;
         $this->view->form = $form;
+        $this->view->type_id = $type_id;
     }
 }

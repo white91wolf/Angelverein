@@ -3,7 +3,7 @@
 		'id', 'class', 'title'
 	);
 	
-	$utils = new Series_HTMLUtils($this);
+	$utils = new Utils_HTMLUtils($this);
 ?>
 
 <span <?php echo $utils->attributeList($attributes) ?>><?php echo $this->escape($this->text) ?></span>

@@ -8,6 +8,9 @@ class Application_Model_Forms_TerminForm extends Zend_Form {
             'label' => 'Name des Termins',
             'required' => true
         ));
+        
+        $headline->addFilter('StringTrim');
+        $headline->addFilter('StripNewlines');
         $headline->addFilter('StripTags');
         $this->addElement($headline);
 
@@ -17,8 +20,8 @@ class Application_Model_Forms_TerminForm extends Zend_Form {
             'label' => 'Beschreibung',
             'required' => true
         ));
-        //TODO Filter nur bestimmte html elemente zulassen
-        $text->addFilter('StipTags');
+        
+        $text->addFilter(new HTMLPurifier_HTMLFilter());
         $this->addElement($text);
 
         //----------------------------------------------------------------------
@@ -27,7 +30,8 @@ class Application_Model_Forms_TerminForm extends Zend_Form {
             'label' => 'Termindatum',
             'required' => true
         ));
-        //TODO Filter nur bestimmte html elemente zulassen
+        
+        $date->addFilter('StripTags');
         $this->addElement($date);
 
         //----------------------------------------------------------------------

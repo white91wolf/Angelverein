@@ -8,6 +8,9 @@ class Application_Model_Forms_ContentForm extends Zend_Form {
             'label' => 'Titel',
             'required' => true
         ));
+        
+        $headline->addFilter('StringTrim');
+        $headline->addFilter('StripNewlines');
         $headline->addFilter('StripTags');
         $this->addElement($headline);
 
@@ -17,8 +20,8 @@ class Application_Model_Forms_ContentForm extends Zend_Form {
             'label' => 'text',
             'required' => true
         ));
-        //TODO Filter nur bestimmte html elemente zulassen
-        $text->addFilter('StipTags');
+        
+        $text->addFilter(new HTMLPurifier_HTMLFilter());
         $this->addElement($text);
 
         //----------------------------------------------------------------------

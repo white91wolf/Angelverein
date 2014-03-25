@@ -8,7 +8,9 @@ class Application_Model_Forms_UserRegisterForm extends Zend_Form {
             'label' => 'Username',
             'required' => true
         ));
-        $headline->addFilter('StripTags');
+        $username->addFilter('StripTags');
+        $username->addFilter('StringTrim');
+        $username->addFilter('StripNewlines');
         $this->addElement($username);
 
         //----------------------------------------------------------------------
@@ -17,7 +19,9 @@ class Application_Model_Forms_UserRegisterForm extends Zend_Form {
             'label' => 'Vorname',
             'required' => true
         ));
-        $headline->addFilter('StripTags');
+        $vorname->addFilter('StripTags');
+        $username->addFilter('StringTrim');
+        $username->addFilter('StripNewlines');
         $this->addElement($vorname);
 
         //----------------------------------------------------------------------
@@ -26,7 +30,9 @@ class Application_Model_Forms_UserRegisterForm extends Zend_Form {
             'label' => 'Nachname',
             'required' => true
         ));
-        $headline->addFilter('StripTags');
+        $nachname->addFilter('StripTags');
+        $nachname->addFilter('StringTrim');
+        $nachname->addFilter('StripNewlines');
         $this->addElement($nachname);
 
         //----------------------------------------------------------------------
@@ -37,6 +43,8 @@ class Application_Model_Forms_UserRegisterForm extends Zend_Form {
         ));
         //TODO Filter nur bestimmte html elemente zulassen
         $text->addFilter('StipTags');
+        $text->addFilter('StringTrim');
+        $text->addFilter('StripNewlines');
         $this->addElement($text);
 
         //----------------------------------------------------------------------
@@ -49,6 +57,8 @@ class Application_Model_Forms_UserRegisterForm extends Zend_Form {
         );
         $email->addValidator(new Zend_Validate_EmailAddress());
         $email->addFilter('StripTags');
+        $email->addFilter('StringTrim');
+        $email->addFilter('StripNewlines');
         $this->addElement($email);
         
         //----------------------------------------------------------------------

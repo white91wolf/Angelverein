@@ -5,22 +5,27 @@ class Application_Model_Forms_UserLoginForm extends Zend_Form {
     public function init() {
         $this->setMethod('post');
 
-        $headline = new Zend_Form_Element_Text('username', array(
+        $username = new Zend_Form_Element_Text('username', array(
             'label' => 'Username',
             'required' => true
         ));
-        $headline->addFilter('StripTags');
-        $this->addElement($headline);
+        
+        $username->addFilter('StringTrim');
+        $username->addFilter('StripNewlines');
+        $username->addFilter('StripTags');
+        $this->addElement($username);
 
         //----------------------------------------------------------------------
 
-        $text = new Zend_Form_Element_Password('password', array(
+        $password = new Zend_Form_Element_Password('password', array(
             'label' => 'Password',
             'required' => true
         ));
-        //TODO Filter nur bestimmte html elemente zulassen
-        $text->addFilter('StipTags');
-        $this->addElement($text);
+        
+        $password->addFilter('StripTags');
+        $password->addFilter('StringTrim');
+        $password->addFilter('StripNewlines');
+        $this->addElement($password);
 
         //----------------------------------------------------------------------
 
