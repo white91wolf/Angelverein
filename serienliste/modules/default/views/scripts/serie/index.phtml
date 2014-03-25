@@ -1,0 +1,46 @@
+<?php 
+	$this->headTitle("Serienliste");
+?>
+<h2>Serienliste</h2>
+<div class="subcontent">
+<a class="icon add_icon" href="<?php echo $this->baseUrl(); ?>/serie/create">Serie anlegen</a>
+<?php
+	echo $this->paginationControl($this->paginator, 'Sliding', 'partial/paginator_search.phtml');
+	
+	$order = '';
+	if(is_array($this->sortOrder) && isset($this->sortOrder['desc']) && !$this->sortOrder['desc']) {
+		$order = '/sortorder/desc';
+	} 
+	
+	$allgenres = 'Alle Genres';
+	$genreList = array_merge(array($allgenres), $this->genreList);
+	$selected = isset($this->genreList[$this->selectedGenre]) ? $this->genreList[$this->selectedGenre] : $allgenres;
+	
+	$genreSelectBox = $this->genHTMLSelect($genreList, array('id' => 'genre_select', 'selected' => $selected));
+	$tableHead = array(
+		'Bild',
+		array('type' => 'a', 'href' => 'serie/index/sortby/name'.$order, 'text' => 'Name'),
+		'Beschreibung',
+		$genreSelectBox,
+		array('type' => 'a', 'href' => 'serie/index/sortby/year'.$order, 'text' => 'Jahr'),
+		array('type' => 'a', 'href' => 'serie/index/sortby/epi'.$order, 'text' => 'Episoden')		
+	);
+
+	echo $this->genHTMLTable(
+		array(
+			'data' => $this->series, 
+			'head' => $tableHead,
+			'map' => array(
+				'serie_icon_image',
+				'serie_link', 
+				'beschreibung',
+				'genres',
+				'release',
+				'folgen'
+			)
+		)
+	);
+	
+	echo $this->paginationControl($this->paginator, 'Sliding', 'partial/paginator_search.phtml');
+?>
+</div>

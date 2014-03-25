@@ -18,4 +18,15 @@ class Application_Model_DbTable_FanglisteTable extends Zend_Db_Table_Abstract {
         return $rows;
     }
     
+    public function getEntriesByUserId($userid = null) {
+        $rows = null;
+        
+        if ($userid != null) {
+            $select = $this->select()->where('user_id = ?', $typeid);
+            $rows = $this->fetchAll($select)->toArray(); 
+        } 
+        
+        return $rows;
+    }
+    
 }

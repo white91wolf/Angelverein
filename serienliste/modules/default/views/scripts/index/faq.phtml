@@ -1,0 +1,34 @@
+<h2>FAQ</h2>
+<?php
+	$faq[0]['headline'] = 'Serien anlegen';
+	$faq[0]['content'] = '<p>Jeder kann - und soll - die Datenbank mit Serien füllen. Dazu einfach auf '.$this->partial('partial/html_anchor.phtml', array('href' => 'serie', 'text' => 'Serienliste')).' gehen und auf Serie anlegen klicken!</p>';
+
+	$faq[1]['headline'] = 'Serien zu deiner Liste hinzufügen';
+	$faq[1]['content'] = '<p>Serien können über zwei Wege zu deiner persönlichen Liste hinzugefügt werden: Über die Livesuche; zu finden unter "'.$this->partial('partial/html_anchor.phtml', array('href' => '/user/userseries', 'text' => 'Meine Serien')).'" und bei den Serien direkt.</p>
+<figure>
+	<img src="'.$this->baseUrl().'/content/howto2.jpg" alt="Hinzufügen per Livesuche" width="776" height="471">
+	<figcaption>Hinzufügen per Livesuche - Zu finden unter "'.$this->partial('partial/html_anchor.phtml', array('href' => '/user/userseries', 'text' => 'Meine Serien')).'"</figcaption>
+</figure>
+
+<figure>
+	<img src="'.$this->baseUrl().'/content/howto3.jpg" alt="Direkt hinzufügen bei einer Serie" width="724" height="257">
+	<figcaption>Direkt hinzufügen bei einer Serie</figcaption>
+</figure>';
+	
+	$faq[2]['headline'] = 'API Dokumentation';
+	$faq[2]['content'] = '<p>Die API ermöglicht es, verschiedene Inhalte aus dieser Webseite abzurufen. Die API ist JSON basiert, d.h. es werden Befehle per GET an die API gesendet und der Server Antwortet mit einem JSON String.</p>
+	<p>Die API kann unter '.$this->baseUrl().'/api angesprochen werden. Möchte man nun zum Beispiel alle Serien samt Listen eines Users abrufen, sähe der Link so aus: <em>'.$this->baseUrl().'/api/userseries/userid/8</em><p>Der Benutzer muss allerdings seine Liste freigeschaltet haben!</p>
+	<ul>
+		<li>'.$this->baseUrl().'/api/userseries/userid/<em>&lt;userid des Users&gt;</em> - Gibt alle Serien samt Listen des Benutzers zurück</li>
+		<li>'.$this->baseUrl().'/api/serieslist/ - Gibt immer die 10 letzten Einträge zurück</li>
+		<li>'.$this->baseUrl().'/api/serieslist/page/<em>&lt;pagenumber&gt;</em> - Gibt 10 Einträge ab pagenumber zurück</li>
+		<li>'.$this->baseUrl().'/api/serie/serienid/<em>&lt;id der gewünschten Serie&gt;</em> - Gibt eine spezifische Serie zurück</li>
+		<li>'.$this->baseUrl().'/api/genres - Gibt alle verfügbaren Genres zurück</li>
+	</ul>';
+
+	foreach($faq as $content) {
+		$this->accordionPane('faq', $content['content'], array('title' => $content['headline']));
+	}
+
+	echo $this->accordionContainer('faq', array('heightStyle' => 'content'));
+?>

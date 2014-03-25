@@ -1,0 +1,31 @@
+<?php 	
+	$html = array();
+	$this->headTitle("Benutzer Liste");
+	if(is_array($this->users)) {
+		$table_header = array('Bild', 'Name', 'Registriert seit');
+		$table_sort = array('user_image', 'nickname_linked', 'created');
+		
+		if($this->isAdmin) {
+			$table_header[] = 'Optionen';
+			$table_sort[] = 'admin_controls';
+		}
+
+		$tmp_html = $this->genHTMLTable(
+			array(
+				'data' => $this->users, 
+				'head' => $table_header, 
+				'map' => $table_sort
+			)
+		);
+	}
+ ?>
+
+<h2>Benutzerliste</h2>
+<div class="subcontent">
+<?php if(!$this->isAdmin) { ?>
+<p>Es werden nur User angezeigt, die Ihre Liste veröffentlicht haben!</p>
+<?php } ?>
+<?php
+	echo $tmp_html;
+?>
+</div>

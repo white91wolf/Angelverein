@@ -1,0 +1,19 @@
+<?php
+	$attributes = array(
+		'href', 'title', 'class', 'id', 'onclick'
+	);
+	
+	if(isset($this->href) && !$this->nobaseurl) {
+		$this->href = $this->baseUrl().'/'.$this->href;
+	}
+	
+	$text = $this->text;
+	
+	if(!isset($this->noescape) && !$this->noescape) { 
+		$text = $this->escape($text);
+	} 
+	
+	$utils = new Series_HTMLUtils($this);
+?>
+
+<a <?php echo $utils->attributeList($attributes) ?>><?php echo $text ?></a>

@@ -1,0 +1,13 @@
+<?php
+	$attributes = array(
+		'width', 'height', 'src', 'class', 'title', 'alt'
+	);
+	
+	if(isset($this->src)) {
+		$this->src = $this->baseUrl().'/'.$this->src;
+	}
+	
+	$utils = new Series_HTMLUtils($this);
+?>
+
+<img <?php echo $utils->attributeList($attributes); ?>>

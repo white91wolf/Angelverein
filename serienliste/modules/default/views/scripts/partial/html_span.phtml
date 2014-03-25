@@ -1,0 +1,9 @@
+<?php
+	$attributes = array(
+		'id', 'class', 'title'
+	);
+	
+	$utils = new Series_HTMLUtils($this);
+?>
+
+<span <?php echo $utils->attributeList($attributes) ?>><?php echo $this->escape($this->text) ?></span>

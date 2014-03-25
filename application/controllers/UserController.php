@@ -23,7 +23,13 @@ class UserController extends Zend_Controller_Action {
         }
     }
 
-    public function login() {
+    public function logoutAction() {
+        Zend_Auth::getInstance()->clearIdentity();
+        $this->currentUserID = 0;
+        $this->_redirect('index');
+    }
+
+    public function loginAction() {
         $form = new Application_Model_Forms_UserLoginForm();
 
         if (($redirect = $this->request->getParam('redirect_after_login')) != null) {
@@ -31,7 +37,7 @@ class UserController extends Zend_Controller_Action {
         }
 
         if ($this->request->isPost() && $form->isValid($_POST) && empty($this->currentUserID)) {
-            $form->getElement('login_user')->addError('Benutzername oder Kennwort falsch!');
+            $form->getElement('username')->addError('Benutzername oder Kennwort falsch!');
         }
 
         return $form;
@@ -67,10 +73,10 @@ class UserController extends Zend_Controller_Action {
 
                     $registred = true;
                 } else {
-                    $form->getElement('register_email')->addError('Email Adresse wird bereits verwendet!');
+                    $form->getElement('email')->addError('Email Adresse wird bereits verwendet!');
                 }
             } else {
-                $form->getElement('register_name')->addError('Username bereits vergeben!');
+                $form->getElement('username')->addError('Username bereits vergeben!');
             }
         }
 

@@ -1,0 +1,120 @@
+<?php 	
+	$html = array();
+	$userImage = '';
+	
+	if($this->userImageID != null && $this->userImageID > 0) {
+		$userImage = $this->partial('partial/html_image.phtml', array(
+			'src' => 'image/index/imageid/'.$this->userImageID.'/imagemode/crop/imagetype/icon',
+			'alt' => 'userimage',
+			'width' => '32',
+			'height' => '32'
+		));
+		
+		$userImage = $this->partial('partial/html_anchor.phtml', array(
+			'href' => 'image/index/imageid/'.$this->userImageID,
+			'text' => $userImage,
+			'class' => 'fancybox',
+			'noescape' => true
+		));
+	}
+	
+	if(is_array($this->userSeries)) {
+		$this->headTitle($this->userName."s Liste");
+		if($this->isPublic || $this->isOwner) {
+			// zeig's an!
+
+			$table_header = array('Bild', 'Name', 'Letzte Folge');
+			$table_sort = array('serie_icon_image', 'serie_link', 'serie_folge');
+			
+			if($this->isOwner) {
+				$table_header[] = 'Liste';
+				$table_header[] = 'Löschen';
+				$table_sort[] = 'serie_cat';
+				$table_sort[] = 'delete';
+			}
+
+			foreach($this->userSeries as $cat_name => $cat_content) {
+				$tmp_html = '';
+				
+				/*
+				if(!empty($cat_content)) {
+					$tmp_html = $this->genHTMLTable(
+						array(
+							'data' => $cat_content, 
+							'head' => $table_header, 
+							'map' => $table_sort
+						), $cat_name);
+				} else {
+					$tmp_html = '<p>Noch keine Serien hier.</p>';
+				}*/
+				$tmp_html = $this->genHTMLTable(
+					array(
+						'data' => $cat_content, 
+						'head' => $table_header, 
+						'map' => $table_sort
+					), $cat_name);
+				$html[$cat_name] = $tmp_html;
+			}
+
+		} else {
+			$html['Privat'] = '<p>Diese Seite ist privat.</p>';
+			$this->headTitle("Seite Privat");
+		}
+	} else {
+		$html['Zugriff verweigert'] = '<p>Zugriff verweigert.</p>'; // Redirect hier?
+		$this->headTitle("Zugriff verweigert");
+	}
+ ?>
+
+<h2><?php echo $userImage ?><?php echo $this->userName ?>' Serienliste</h2>
+<div class="subcontent">
+<?php
+	if($this->isOwner) { 
+		$accContent = $this->addForm.'<p id="serie_description"><img src="'.$this->baseUrl().'/image/index/imageid/0" width="100" height="100" id="selected_serie_img"></p>';
+		$accContent2 = '<p>Bitte Seite neuladen, falls die gewünschte Liste nicht zum Download bereit steht!</p><ul>';
+		
+		// Generiere download Liste
+		foreach($this->usedCats as $k => $cat) {
+			$accContent2 .= '<li>'.$this->partial('partial/html_anchor.phtml', array(
+				'href' => 'user/getlistpdf/catid/'.$k,
+				'text' => $cat.'.pdf'
+			)).'</li>';
+		}
+		
+		$accContent2 .= '<li>'.$this->partial('partial/html_anchor.phtml', array(
+				'href' => 'user/getlistpdf',
+				'text' => 'AlleListen.pdf'
+			)).'</li>';
+		$accContent2 .= '<ul>';
+		
+		// Tab immer anzeigen wenn einer Serie hinzugefügt wurde 
+		$collaps = isset($this->added) && $this->added ? 0 : 'false';
+
+		$this->accordionPane('addserie', $accContent, 
+			array(
+				'title' => 'Serie zur Liste hinzufügen'
+			)
+		);
+		$this->accordionPane('addserie', $accContent2, 
+			array(
+				'title' => 'Serienlisten Download'
+			)
+		);
+		echo $this->accordionContainer('addserie', 
+			array(
+				'collapsible' => 'true', 
+				'active' => $collaps,
+				'heightStyle' => 'content'
+			)
+		);
+	} 
+?>
+</div>
+<div id="serieslist"<?php if($this->isOwner) { echo ' class="owner"'; } ?>>
+ <?php
+	foreach($html as $headline => $content) {
+		echo '<h3>'.$headline.'</h3>';
+		echo '<div class="subcontent">'.$content.'</div>';
+	}
+ ?>
+</div>
