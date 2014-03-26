@@ -17,11 +17,9 @@ class HTMLPurifier_HTMLFilter implements Zend_Filter_Interface {
      * @return void
      */
     public function __construct() {
-        if (!class_exists('HTMLPurifier_Bootstrap', false)) {
-            require_once PROJECT_PATH .
-                    '/lib/HTMLPurifier/HTMLPurifier/Bootstrap.php';
-            spl_autoload_register(array('HTMLPurifier_Bootstrap', 'autoload'));
-        }
+        require_once APPLICATION_PATH .
+                '/../lib/HTMLPurifier/HTMLPurifier.auto.php';
+
 
         $this->configure();
 
@@ -42,7 +40,7 @@ class HTMLPurifier_HTMLFilter implements Zend_Filter_Interface {
     public function addAttribute($str) {
         return $this->config->getHTMLDefinition(true)->addAttribute($str);
     }
-    
+
     public function addElement($str) {
         return $this->config->getHTMLDefinition(true)->addElement($str);
     }

@@ -1,6 +1,6 @@
 <?php
 
-class Application_Model_Forms_ContentForm extends Zend_Form {
+class Application_Model_Forms_DienstplanForm extends Zend_Form {
     public function init(){
         $this->setMethod('post');
 

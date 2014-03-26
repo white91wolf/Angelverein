@@ -1,4 +1,5 @@
 <?php
+
 // TODO Linkgeadline fuer Pages
 class ContentController extends Zend_Controller_Action {
 
@@ -11,7 +12,20 @@ class ContentController extends Zend_Controller_Action {
     }
 
     public function indexAction() {
-        // action body
+        $request = $this->getRequest();
+        $activePageId = null; // TODO aus config bla default holen!
+
+        if ($request->isGet()) {
+            $activePageId = (int) $request->getParam('content');
+        }
+
+        $page = $this->contentTable->getEntryById($activePageId);
+
+        if (empty($page) || $page->public) {
+            $page = null;
+        }
+        // TODO $this->view->page = InlineModules_Bla::EvocateModule($page);
+        $this->view->page = $page;
     }
 
     public function editAction() {
@@ -58,7 +72,7 @@ class ContentController extends Zend_Controller_Action {
 
         $form = new Application_Model_Forms_ContentForm();
         $type_id = (int) $request->getParam('type_id');
-        
+
         if ($request->isGet() && $request->isPost() && !empty($type_id) && $form->isValid($_POST)) {
             if (!empty($this->contentTypeTable->getContentTypeByID($type_id))) {
                 $newContentid = $this->contentTable->createNewContent($form->getValue('headline'), $form->getValue('text'), $user_id, $type_id);
@@ -69,4 +83,5 @@ class ContentController extends Zend_Controller_Action {
         $this->view->form = $form;
         $this->view->type_id = $type_id;
     }
+
 }
