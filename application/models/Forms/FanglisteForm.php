@@ -1,18 +1,17 @@
 <?php
 
-class Application_Model_Forms_ContentForm extends Zend_Form {
+class Application_Model_Forms_FanglisteForm extends Zend_Form {
     public function init(){
         $this->setMethod('post');
 
-        $headline = new Zend_Form_Element_Text('headline', array(
-            'label' => 'Titel',
+        $date = new ZendX_JQuery_Form_Element_DatePicker('date', array(
+            'label' => 'Datum der Tätigkeit',
             'required' => true
         ));
         
-        $headline->addFilter('StringTrim');
-        $headline->addFilter('StripNewlines');
-        $headline->addFilter('StripTags');
-        $this->addElement($headline);
+        $date->addFilter('StringTrim');
+        $date->addFilter('StripTags');
+        $this->addElement($date);
 
         //----------------------------------------------------------------------
 
@@ -31,6 +30,19 @@ class Application_Model_Forms_ContentForm extends Zend_Form {
         );
 
         $this->addElement($submit);
+    }
+    
+    public function addGewaesser($gewaesserArr) {
+        $dropdown = new Zend_Form_Element_Select('gewaesser', array(
+            'label' => 'Gewässer',
+            'required' => true)    
+        );
+        
+        foreach($gewaesserArr as $key => $value) {
+            $dropdown->addMultiOption($value['id'],$value['name']);
+        }
+        
+        $this->addElement($dropdown);
     }
 
 }

@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: 127.0.0.1
--- Erstellungszeit: 25. Mrz 2014 um 21:14
+-- Erstellungszeit: 26. Mrz 2014 um 21:03
 -- Server Version: 5.6.16
 -- PHP-Version: 5.5.9
 
@@ -67,6 +67,7 @@ CREATE TABLE IF NOT EXISTS `content` (
   `headline` varchar(255) NOT NULL,
   `visible` tinyint(1) NOT NULL DEFAULT '1',
   `lastupdateTime` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
+  `public` tinyint(1) NOT NULL DEFAULT '1',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
@@ -133,7 +134,17 @@ CREATE TABLE IF NOT EXISTS `gewaesser` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(75) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=5 ;
+
+--
+-- Daten für Tabelle `gewaesser`
+--
+
+INSERT INTO `gewaesser` (`id`, `name`) VALUES
+(1, 'Donau'),
+(2, 'Brigach'),
+(3, 'Nil'),
+(4, 'Kötach');
 
 -- --------------------------------------------------------
 

@@ -7,7 +7,7 @@ class Application_Model_DbTable_GewaesserTable extends Zend_Db_Table_Abstract {
     public function getAll() {
         $rows = $this->fetchAll();
 
-        return $rows;
+        return $rows->toArray();
     }
 
 }
