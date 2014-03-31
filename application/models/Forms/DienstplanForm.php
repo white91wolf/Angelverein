@@ -25,6 +25,13 @@ class Application_Model_Forms_DienstplanForm extends Zend_Form {
 
         //----------------------------------------------------------------------
         
+        $hours = new Zend_Form_Element_Text('hours', array(
+            'label' => 'Zeitaufwand',
+            'required' => true
+        ));
+        //TODO only Zahlen
+        $this->addElement($hours);
+        
         $submit = new Zend_Form_Element_Submit('submit', array(
             'label' => 'Eintragen')
         );
