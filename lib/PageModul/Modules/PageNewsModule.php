@@ -11,7 +11,7 @@
  *
  * @author FloH
  */
-class PageNewsModule implements TagModule {
+class PageModul_PageNews implements PageModul_Modul {
     protected $_contentTable;
 
     public function init() {

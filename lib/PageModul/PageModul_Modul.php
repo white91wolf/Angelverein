@@ -10,7 +10,7 @@
  *
  * @author FloH
  */
-interface TagModule {
+interface PageModul_Modul {
     public function init();
     public function getAsString();
 }
