@@ -29,4 +29,21 @@ class Application_Model_DbTable_FanglisteTable extends Zend_Db_Table_Abstract {
         return $rows;
     }
     
+    public function createNewContent($userId, $date, $gewaesser) {
+        if(empty($date) || !($date instanceof Date)) {
+            $date = new Date();
+        }
+        
+        // TODO auf null pruefen, evtl. validation
+        $key = $this->insert(
+                array(
+                    'user_id' => $userId,
+                    'gewaesser_id' => $gewaesser,
+                    'datum' => $date
+                )
+        );
+        
+        return $key;
+    }
+    
 }

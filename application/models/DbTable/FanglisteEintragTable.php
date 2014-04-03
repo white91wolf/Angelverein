@@ -31,4 +31,18 @@ class Application_Model_DbTable_FanglisteEintragTable extends Zend_Db_Table_Abst
         
         return $rows;
     }
+    
+    public function createNewContent($fischId, $count, $gewicht, $fanglisteId) {
+        // TODO auf null pruefen, evtl. validation
+        $key = $this->insert(
+                array(
+                    'fisch_id' => $fischId,
+                    'anzahl' => (int)$count,
+                    'gewicht' => (int)$gewicht,
+                    'fangliste_id' => (int)$fanglisteId
+                )
+        );
+        
+        return $key;
+    }
 }

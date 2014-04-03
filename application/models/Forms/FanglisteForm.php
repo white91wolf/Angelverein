@@ -1,11 +1,26 @@
 <?php
 
 class Application_Model_Forms_FanglisteForm extends Zend_Form {
-    protected $counter;
-
+    protected $dummy;
+    
+    public function __construct($fishArray) {
+        parent::__construct();
+        $this->genDummySelectBox($fishArray);
+    }
+    
+    private function genDummySelectBox($fishArr) {
+        $ffish = new Zend_Form_Element_Select('dummy', array(
+            'label' => 'Fischart',
+            'required' => true)    
+        );
+        foreach ($fishArr as $key => $value){
+            $ffish->addMultiOption($value['id'], $value['name']);
+        }
+        
+        $this->dummy = $ffish;
+    }
 
     public function init(){
-        $this->counter = 0;
         $this->setMethod('post');
 
         $date = new ZendX_JQuery_Form_Element_DatePicker('date', array(
@@ -39,32 +54,32 @@ class Application_Model_Forms_FanglisteForm extends Zend_Form {
         $this->addElement($dropdown);
     }
     
-    public function addFishFormElements($fishArr){
-        $ffish = new Zend_Form_Element_Select("ffisch$this->counter", array(
-            'label' => 'Fischart',
-            'required' => true)    
-        );
-        foreach ($fishArr as $key => $value){
-            $ffish->addMultiOption($value['id'], $value['name']);
-        }
-        $this->addElement($ffish);
+    private function getSelectBox($nameValue) {
+        $result = $this->dummy;
+        $result->setName($nameValue);
         
-        $fcount = new Zend_Form_Element_Text("fcount$this->counter", array(
+        return $result;
+    }
+
+    public function addFishFormElements($nameValue){
+        $this->addElement($this->getSelectBox($nameValue.'_fishtypebox'));
+        
+        $fcount = new Zend_Form_Element_Text($nameValue.'_countinput', array(
                 'label' => 'Anzahl',
                 'required' => true)
         );
+        
         $fcount->addValidator(new Zend_Validate_Int());
         $this->addElement($fcount);
         
         
-        $fweight = new Zend_Form_Element_Text("fweight$this->counter", array(
+        $fweight = new Zend_Form_Element_Text($nameValue.'_weightinput', array(
             'label' => 'Gewicht',
             'required' => true)        
         );
+        //TODO kommaaaaazahlen maybe
         $fweight->addValidator(new Zend_Validate_Int());
         $this->addElement($fweight);
-        
-        
     }
 
 }
