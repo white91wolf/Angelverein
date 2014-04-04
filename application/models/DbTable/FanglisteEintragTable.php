@@ -22,11 +22,8 @@ class Application_Model_DbTable_FanglisteEintragTable extends Zend_Db_Table_Abst
         $rows = null;
         
         if ($id != null) {
-            $rows = $this->find($id); 
-            
-            if(!empty($rows)) {
-                $rows = $rows->current();
-            }
+            $select = $this->select()->where('fanglist_id = ?', $id);
+            $rows = $this->fetchAll($select); 
         } 
         
         return $rows;

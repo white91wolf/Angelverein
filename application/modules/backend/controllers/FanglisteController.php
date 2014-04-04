@@ -31,20 +31,32 @@ class Backend_FanglisteController extends Zend_Controller_Action {
     }
 
     public function editAction() {
-        $this->form = new Application_Model_Forms_FanglisteForm();
-        /*
-          if(($this->request->isGet() || $this->request->isPost()) && ($userID = $this->request->getParam('fanglistId')) != null &&
-          $this->currentUserID > 0) {
-          $fangliste = $this->fanglisteTable->getEntryById();
-          //checken ob besitzer oder vorstand
-          if(empty($fangliste) && $fangliste ){
+        $form = null;
+        //erst prüfen ob form valid dann änderungen speichern damit das nächste if auch greifft und die daten eingetragen werden
 
-          }
-          } */
+        if ($this->getRequest()->isPost() && isset($_POST['fanglistid'])) {
+            $fanglistId = $this->getRequest()->getParam('fanglistid');
+            $fanglist = $this->fanglisteTable->getEntryById($fanglistId);
 
-        $this->form->addGewaesser($this->gewaesser);
-        $this->form->addFishFormElements($this->fishes);
-        $this->view->form = $this->form;
+            if (!empty($fanglist) && ($fanglist->user_id == $this->currentUserID || $this->currentUserRole == 'vorstand')) {
+                $eintraege = $this->fanglisteEintragTable->getAllEntriesByFanglisteId($fanglistId);
+                $anzahlEintraege = $eintraege->count();
+
+                $form = $this->generateFishForms($anzahlEintraege);
+
+                $form->getElement('date')->setValue($fanglist->datum);
+                $form->getElement('gewaesser')->setValue($fanglist->gewaesser_id);
+
+                for ($i = 0; $i < $anzahlEintraege; $i++) {
+                    $row = $eintraege->next();
+                    $form->getElement($i . '_fishtypebox')->setValue($row->fisch_id);
+                    $form->getElement($i . '_countinput')->setValue($row->anzahl);
+                    $form->getElement($i . '_weightinput')->setValue($row->gewicht);
+                }
+            }
+        }
+
+        $this->view->form = $form;
     }
 
     private function getAllEntries() {
@@ -63,24 +75,24 @@ class Backend_FanglisteController extends Zend_Controller_Action {
 
     public function createAction() {
         $c = 1;
-        
+
         if ($this->getRequest()->isPost() && isset($_POST['counter'])) {
             $c = (int) $_POST['counter'];
         }
-        
+
         $form = $this->generateFishForms($c);
         if ($this->getRequest()->isPost() && $form->valid($_POST)) {
-            
+
             $date = $form->getValue('date');
             $gewaesser = $form->getValue('gewaesser');
-            
+
             $fanglistId = $this->fanglisteTable->createNewContent($this->currentUserID, $date, $gewaesser);
-             
-            for($i = 0; $i < $c; $i++){
-                $fishtyp = $form->getValue($i.'_fishtypebox');
-                $count = $form->getValue($i.'_countinput');
-                $gewicht = $form->getValue($i.'_weightinput');
-                
+
+            for ($i = 0; $i < $c; $i++) {
+                $fishtyp = $form->getValue($i . '_fishtypebox');
+                $count = $form->getValue($i . '_countinput');
+                $gewicht = $form->getValue($i . '_weightinput');
+
                 $this->fanglisteEintragTable->createNewContent($fishtyp, $count, $gewicht, $fanglistId);
             }
         }
@@ -91,7 +103,7 @@ class Backend_FanglisteController extends Zend_Controller_Action {
     private function generateFishForms($count) {
         $form = new Application_Model_Forms_FanglisteForm($this->fishes);
         $form->addGewaesser($this->gewaesser);
-        
+
         for ($i = 0; $i < $count; $i++) {
             $form->addFishFormElements($i);
         }
