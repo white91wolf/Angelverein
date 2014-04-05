@@ -76,7 +76,7 @@ class Backend_FanglisteController extends Zend_Controller_Action {
     public function newfishgroupAction() {
         $counter = $this->_getParam('counter');
         
-        if(!empty($counter)) {
+        if($counter !== null) {
             $fishForm = new Application_Model_Forms_FanglisteForm($this->fishes, $this->gewaesser);
             $fishForm->setCounter($counter);
             $ajaxContext = $this->_helper->getHelper('AjaxContext');
@@ -88,7 +88,12 @@ class Backend_FanglisteController extends Zend_Controller_Action {
         }
     }
 
+    // TODO deprecated, muss neugeschrieben werden
+    // $form->preValidation($_POST); !
     public function createAction() {
+        if(!$this->getRequest()->isPost()) {
+            $this->view->headScript()->appendFile($this->view->baseUrl() . '/resource/js/catchlist.js'); // TODO pfad irgendwo einheitlich notieren
+        }
         $c = 1;
 
         if ($this->getRequest()->isPost() && isset($_POST['counter'])) {
