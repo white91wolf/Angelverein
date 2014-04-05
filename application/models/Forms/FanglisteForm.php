@@ -43,7 +43,7 @@ class Application_Model_Forms_FanglisteForm extends Zend_Form {
 
     public function init(){
         $this->setMethod('post');
-        
+        $this->setName("catchListForm");
         $this->fishTypeSelectBox = $this->genFishTypeSelectBox($this->fishTypeArray);
         
         $this->addElement($this->getGewaesserSelectBox($this->gewaesserArray));
@@ -70,6 +70,12 @@ class Application_Model_Forms_FanglisteForm extends Zend_Form {
         $this->addElement($group['fishWeight']);
     }
     
+    private function setIdOfElement(Zend_Form_Element $element) {
+        $element->setAttrib('id', 'element_' . $this->counter . '_' . $element->getId());
+        
+        return $element;
+    }
+    
     private function getSubmit() {
         $submit = new Zend_Form_Element_Submit('submit', array(
             'label' => 'Speichern')
@@ -92,7 +98,7 @@ class Application_Model_Forms_FanglisteForm extends Zend_Form {
     }
 
     public function getFishTypeSelectBox() {
-        return $this->fishTypeSelectBox;
+        return $this->setIdOfElement($this->fishTypeSelectBox);
     }
     
     public function getFishWeightTextBox() {
@@ -104,7 +110,7 @@ class Application_Model_Forms_FanglisteForm extends Zend_Form {
         //TODO kommaaaaazahlen maybe
         $fweight->addValidator(new Zend_Validate_Int());
         
-        return $fweight;
+        return $this->setIdOfElement($fweight);
     }
     
     public function getCountFishesTextBox() {
@@ -116,7 +122,7 @@ class Application_Model_Forms_FanglisteForm extends Zend_Form {
         
         $fcount->addValidator(new Zend_Validate_Int());
         
-        return $fcount;
+        return $this->setIdOfElement($fcount);
     }
     
     public function setCounter($value) {
@@ -127,5 +133,9 @@ class Application_Model_Forms_FanglisteForm extends Zend_Form {
         }
         
         $this->counter = $value_;
+    }
+    
+    public function getCounter(){
+        return $this->counter;
     }
 }
