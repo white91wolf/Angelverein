@@ -1,48 +1,33 @@
 <?php
 
 class Application_Model_Forms_FanglisteForm extends Zend_Form {
-    protected $dummy;
+    protected $gewaesserArray;
+    protected $fishTypeArray;
+    protected $fishTypeSelectBox;
+    protected $counter = 0;
     
-    public function __construct($fishArray) {
+    public function __construct($fishArray, $gewaesser) {
+        $this->fishTypeArray = $fishArray;
+        $this->gewaesserArray = $gewaesser;
+        
         parent::__construct();
-        $this->genDummySelectBox($fishArray);
     }
     
-    private function genDummySelectBox($fishArr) {
-        $ffish = new Zend_Form_Element_Select('dummy', array(
+    private function genFishTypeSelectBox($fishArr) {
+        $ffish = new Zend_Form_Element_Select('fishType[]', array(
             'label' => 'Fischart',
+            'isArray' => true,
             'required' => true)    
         );
-        foreach ($fishArr as $key => $value){
+        
+        foreach ($fishArr as $value){
             $ffish->addMultiOption($value['id'], $value['name']);
         }
         
-        $this->dummy = $ffish;
-    }
-
-    public function init(){
-        $this->setMethod('post');
-
-        $date = new ZendX_JQuery_Form_Element_DatePicker('date', array(
-            'label' => 'Datum der Tätigkeit',
-            'required' => true
-        ));
-        
-        $date->addFilter('StringTrim');
-        $date->addFilter('StripTags');
-        $this->addElement($date);
-
-        //----------------------------------------------------------------------
-        
-        $submit = new Zend_Form_Element_Submit('submit', array(
-            'label' => 'Speichern')
-        );
-        $submit->setOrder(99);
-
-        $this->addElement($submit);
+        return $ffish;
     }
     
-    public function addGewaesser($gewaesserArr) {
+    public function getGewaesserSelectBox($gewaesserArr) {
         $dropdown = new Zend_Form_Element_Select('gewaesser', array(
             'label' => 'Gewässer',
             'required' => true)    
@@ -51,35 +36,96 @@ class Application_Model_Forms_FanglisteForm extends Zend_Form {
         foreach($gewaesserArr as $key => $value) {
             $dropdown->addMultiOption($value['id'],$value['name']);
         }
-        $this->addElement($dropdown);
-    }
-    
-    private function getSelectBox($nameValue) {
-        $result = $this->dummy;
-        $result->setName($nameValue);
         
-        return $result;
+        
+        return $dropdown;
     }
 
-    public function addFishFormElements($nameValue){
-        $this->addElement($this->getSelectBox($nameValue.'_fishtypebox'));
+    public function init(){
+        $this->setMethod('post');
         
-        $fcount = new Zend_Form_Element_Text($nameValue.'_countinput', array(
-                'label' => 'Anzahl',
-                'required' => true)
+        $this->fishTypeSelectBox = $this->genFishTypeSelectBox($this->fishTypeArray);
+        
+        $this->addElement($this->getGewaesserSelectBox($this->gewaesserArray));
+        $this->addElement($this->getDatePicker());
+        $this->addElement($this->getSubmit());
+    }
+    
+    public function addFishFormElements(){
+        $group = array(
+            'fishType' => $this->fishTypeSelectBox,
+            'fishCount' => $this->getCountFishesTextBox(),
+            'fishWeight' => $this->getFishWeightTextBox()
         );
         
-        $fcount->addValidator(new Zend_Validate_Int());
-        $this->addElement($fcount);
+        // change ID
+        foreach($group as $element) {
+            $element->setAttrib('id', $element->getId() . '_' . $this->counter);
+        }
+
+        ++$this->counter;
+                
+        $this->addElement($group['fishType']);
+        $this->addElement($group['fishCount']);
+        $this->addElement($group['fishWeight']);
+    }
+    
+    private function getSubmit() {
+        $submit = new Zend_Form_Element_Submit('submit', array(
+            'label' => 'Speichern')
+        );
+        $submit->setOrder(99);
         
+        return $submit;
+    }
+    
+    private function getDatePicker() {
+        $date = new ZendX_JQuery_Form_Element_DatePicker('date', array(
+            'label' => 'Datum',
+            'required' => true
+        ));
         
-        $fweight = new Zend_Form_Element_Text($nameValue.'_weightinput', array(
-            'label' => 'Gewicht',
+        $date->addFilter('StringTrim');
+        $date->addFilter('StripTags');
+        
+        return $date;
+    }
+
+    public function getFishTypeSelectBox() {
+        return $this->fishTypeSelectBox;
+    }
+    
+    public function getFishWeightTextBox() {
+        $fweight = new Zend_Form_Element_Text('weight[]', array(
+            'label' => 'Ø Gewicht pro Fisch',
+            'isArray' => true,
             'required' => true)        
         );
         //TODO kommaaaaazahlen maybe
         $fweight->addValidator(new Zend_Validate_Int());
-        $this->addElement($fweight);
+        
+        return $fweight;
     }
-
+    
+    public function getCountFishesTextBox() {
+        $fcount = new Zend_Form_Element_Text('count_fishes[]', array(
+                'label' => 'Anzahl',
+                'isArray' => true,
+                'required' => true)
+        );
+        
+        $fcount->addValidator(new Zend_Validate_Int());
+        
+        return $fcount;
+    }
+    
+    public function setCounter($value) {
+        $value_ = (int)$value;
+        
+        if($value_ < 0) {
+            $value_ = 0;
+        }
+        
+        $this->counter = $value_;
+    }
 }
