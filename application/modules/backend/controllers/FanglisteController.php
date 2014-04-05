@@ -72,6 +72,21 @@ class Backend_FanglisteController extends Zend_Controller_Action {
         }
         return $result;
     }
+    
+    public function newfishgroupAction() {
+        $counter = $this->_getParam('counter');
+        
+        if(!empty($counter)) {
+            $fishForm = new Application_Model_Forms_FanglisteForm($this->fishes, $this->gewaesser);
+            $fishForm->setCounter($counter);
+            $ajaxContext = $this->_helper->getHelper('AjaxContext');
+            $ajaxContext->addActionContext('newfishgroup', 'html')->initContext();
+            
+            $this->view->field_a = $fishForm->getFishTypeSelectBox();
+            $this->view->field_b = $fishForm->getCountFishesTextBox();
+            $this->view->field_c = $fishForm->getFishWeightTextBox();
+        }
+    }
 
     public function createAction() {
         $c = 1;
@@ -101,11 +116,10 @@ class Backend_FanglisteController extends Zend_Controller_Action {
     }
 
     private function generateFishForms($count) {
-        $form = new Application_Model_Forms_FanglisteForm($this->fishes);
-        $form->addGewaesser($this->gewaesser);
+        $form = new Application_Model_Forms_FanglisteForm($this->fishes, $this->gewaesser);
 
         for ($i = 0; $i < $count; $i++) {
-            $form->addFishFormElements($i);
+            $form->addFishFormElements();
         }
 
         return $form;
