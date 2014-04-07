@@ -1,7 +1,7 @@
 <?php
 
 // TODO Linkgeadline fuer Pages
-class ContentController extends Zend_Controller_Action {
+class Backend_ContentController extends Zend_Controller_Action {
 
     protected $contentTable;
     protected $contentTypeTable;

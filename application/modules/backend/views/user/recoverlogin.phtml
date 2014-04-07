@@ -1,0 +1,16 @@
+<?php 
+	$this->headTitle("Zugangsdaten vergessen");
+?>
+<h2>Zugangsdaten vergessen</h2>
+<div class="subcontent">
+<?php 
+	if($this->recover) { 
+?>
+	<p>Der Benutzerdaten wurden an Ihre Email gesendet!</p>
+		
+<?php
+	} else {
+		echo $this->form;
+	}
+ ?>
+</div>

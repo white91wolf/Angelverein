@@ -1,13 +1,15 @@
 <?php
 
-class UserController extends Zend_Controller_Action {
+class Backend_UserController extends Zend_Controller_Action {
 
     protected $currentUserID;
     protected $currentUserName;
     protected $currentUserRole;
     protected $userTable;
+    protected $request;
 
     public function init() {
+        $this->request = $this->getRequest();	
         $this->currentUserID = Application_Plugin_Auth_AccessControl::getUserID();
         $this->currentUserName = Application_Plugin_Auth_AccessControl::getUserName();
         $this->currentUserRole = Application_Plugin_Auth_AccessControl::getUserRole();
@@ -83,5 +85,4 @@ class UserController extends Zend_Controller_Action {
         $this->view->form = $form;
         $this->view->registred = $registred;
     }
-
 }
