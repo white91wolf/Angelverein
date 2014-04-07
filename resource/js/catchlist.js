@@ -17,6 +17,7 @@ function addField() {
         data: "counter=" + element_counter++,
         success: function(newGroup) {
             $("#submit-element").before(newGroup);
+            setHiddenFieldValue(element_counter);
         }
     });
 }
@@ -26,5 +27,10 @@ function removeField() {
         var pattern = '*[id^=element_' + (--element_counter) + '_]';
         console.log(pattern);
         $(pattern).remove();
+        setHiddenFieldValue(element_counter);
     }
+}
+
+function setHiddenFieldValue(val) {
+    $("#group_counter").attr("value", val);
 }

@@ -48,7 +48,17 @@ class Application_Model_Forms_FanglisteForm extends Zend_Form {
         
         $this->addElement($this->getGewaesserSelectBox($this->gewaesserArray));
         $this->addElement($this->getDatePicker());
+        $this->addElement($this->getCounterHiddenField());
         $this->addElement($this->getSubmit());
+    }
+    
+    private function getCounterHiddenField() {
+        $hidden = new Zend_Form_Element_Hidden('group_counter');
+        $hidden->setDecorators(array('ViewHelper'));
+        // TODO mit counter + 1 eher unschoen
+        $hidden->setValue($this->counter + 1);
+        
+        return $hidden;
     }
     
     public function addFishFormElements(){
