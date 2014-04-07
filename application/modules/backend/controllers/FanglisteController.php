@@ -72,48 +72,49 @@ class Backend_FanglisteController extends Zend_Controller_Action {
         }
         return $result;
     }
-    
+
     public function newfishgroupAction() {
         $counter = $this->_getParam('counter');
-        
-        if($counter !== null) {
+
+        if ($counter !== null) {
             $fishForm = new Application_Model_Forms_FanglisteForm($this->fishes, $this->gewaesser);
             $fishForm->setCounter($counter);
             $ajaxContext = $this->_helper->getHelper('AjaxContext');
             $ajaxContext->addActionContext('newfishgroup', 'html')->initContext();
-            
+
             $this->view->field_a = $fishForm->getFishTypeSelectBox();
             $this->view->field_b = $fishForm->getCountFishesTextBox();
             $this->view->field_c = $fishForm->getFishWeightTextBox();
         }
     }
 
-    // TODO deprecated, muss neugeschrieben werden
-    // $form->preValidation($_POST); !
+    
     public function createAction() {
-        if(!$this->getRequest()->isPost()) {
+        if (!$this->getRequest()->isPost()) {
             $this->view->headScript()->appendFile($this->view->baseUrl() . '/resource/js/catchlist.js'); // TODO pfad irgendwo einheitlich notieren
         }
         $c = 1;
 
-        if ($this->getRequest()->isPost() && isset($_POST['counter'])) {
-            $c = (int) $_POST['counter'];
+        if ($this->getRequest()->isPost() && isset($_POST['group_counter'])) {
+            $c = (int) $_POST['group_counter'];
         }
 
         $form = $this->generateFishForms($c);
-        if ($this->getRequest()->isPost() && $form->valid($_POST)) {
+     
+        if ($this->getRequest()->isPost() && $form->isValid($_POST)) {
 
             $date = $form->getValue('date');
             $gewaesser = $form->getValue('gewaesser');
 
             $fanglistId = $this->fanglisteTable->createNewContent($this->currentUserID, $date, $gewaesser);
 
-            for ($i = 0; $i < $c; $i++) {
-                $fishtyp = $form->getValue($i . '_fishtypebox');
-                $count = $form->getValue($i . '_countinput');
-                $gewicht = $form->getValue($i . '_weightinput');
+            $fishtyp = $form->getValue('weight');
+            $count = $form->getValue('count_fishes');
+            $gewicht = $form->getValue('fishType');
 
-                $this->fanglisteEintragTable->createNewContent($fishtyp, $count, $gewicht, $fanglistId);
+            $count_form = count($fishtyp);
+            for ($i = 0; $i < $count_form; $i++) {
+                $this->fanglisteEintragTable->createNewContent($fishtyp[$i], $count[$i], $gewicht[$i], $fanglistId);
             }
         }
 
@@ -122,7 +123,7 @@ class Backend_FanglisteController extends Zend_Controller_Action {
 
     private function generateFishForms($count) {
         $form = new Application_Model_Forms_FanglisteForm($this->fishes, $this->gewaesser);
-
+        // Generierung in form auslagern, validator fehler zerstoeren uA form ..
         for ($i = 0; $i < $count; $i++) {
             $form->addFishFormElements();
         }
