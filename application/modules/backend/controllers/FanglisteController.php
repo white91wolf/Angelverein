@@ -88,8 +88,7 @@ class Backend_FanglisteController extends Zend_Controller_Action {
         }
     }
 
-    // TODO deprecated, muss neugeschrieben werden
-    // $form->preValidation($_POST); !
+    
     public function createAction() {
         if (!$this->getRequest()->isPost()) {
             $this->view->headScript()->appendFile($this->view->baseUrl() . '/resource/js/catchlist.js'); // TODO pfad irgendwo einheitlich notieren
