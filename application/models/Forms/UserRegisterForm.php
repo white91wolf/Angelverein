@@ -42,7 +42,7 @@ class Application_Model_Forms_UserRegisterForm extends Zend_Form {
             'required' => true
         ));
         //TODO Filter nur bestimmte html elemente zulassen
-        $text->addFilter('StipTags');
+        $text->addFilter('StripTags');
         $text->addFilter('StringTrim');
         $text->addFilter('StripNewlines');
         $this->addElement($text);

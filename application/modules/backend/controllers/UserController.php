@@ -41,8 +41,7 @@ class Backend_UserController extends Zend_Controller_Action {
         if ($this->request->isPost() && $form->isValid($_POST) && empty($this->currentUserID)) {
             $form->getElement('username')->addError('Benutzername oder Kennwort falsch!');
         }
-
-        return $form;
+        $this->view->form = $form;
     }
 
     public function registerAction() {
@@ -55,9 +54,9 @@ class Backend_UserController extends Zend_Controller_Action {
              * und ob Email nicht schon vergeben ist
              */
             $username = $form->getValue('username');
-            $mail = $form->getValue('email');
+            $mail = $form->getValue('register_email');
 
-            $rows = $this->userTable->getUserByName($name);
+            $rows = $this->userTable->getUserByName($username);
 
             if (count($rows) == 0) {
                 $rowsByMail = $this->userTable->getUserByMail($mail);
@@ -65,10 +64,13 @@ class Backend_UserController extends Zend_Controller_Action {
                     /**
                      * User in DB festschreiben 
                      */
+                    //var_dump($form);die();
+                    
                     $user = $this->userTable->createRow();
                     $user->username = $username;
                     $user->email = $mail;
-                    $user->password = sha1($form->getValue('register_password'));
+                    //TODO password besser verschlüsseln
+                    $user->password = sha1($form->getValue('password'));
                     $user->vorname = $form->getValue('vorname');
                     $user->nachname = $form->getValue('nachname');
                     $user->save();

@@ -5,11 +5,11 @@ class Application_Model_Forms_UserLoginForm extends Zend_Form {
     public function init() {
         $this->setMethod('post');
 
-        $username = new Zend_Form_Element_Text('username', array(
+        $username = new Zend_Form_Element_Text('login_user', array(
             'label' => 'Username',
             'required' => true
         ));
-        
+
         $username->addFilter('StringTrim');
         $username->addFilter('StripNewlines');
         $username->addFilter('StripTags');
@@ -17,17 +17,25 @@ class Application_Model_Forms_UserLoginForm extends Zend_Form {
 
         //----------------------------------------------------------------------
 
-        $password = new Zend_Form_Element_Password('password', array(
+        $password = new Zend_Form_Element_Password('login_password', array(
             'label' => 'Password',
             'required' => true
         ));
-        
+
         $password->addFilter('StripTags');
         $password->addFilter('StringTrim');
         $password->addFilter('StripNewlines');
         $this->addElement($password);
 
         //----------------------------------------------------------------------
+
+        $remember = new Zend_Form_Element_Checkbox('rememberlogin', array(
+            'label' => 'Dauerhaft einloggen!',
+            'required' => false
+                )
+        );
+
+
 
         $submit = new Zend_Form_Element_Submit('submit', array(
             'label' => 'Login')
