@@ -10,8 +10,10 @@ class Backend_FanglisteController extends Zend_Controller_Action {
     protected $gewaesser;
     protected $fishes;
     protected $form;
+    protected $request;
 
     public function init() {
+        $this->request = $this->getRequest();
         $this->currentUserID = Application_Plugin_Auth_AccessControl::getUserID();
         $this->currentUserName = Application_Plugin_Auth_AccessControl::getUserName();
         $this->currentUserRole = Application_Plugin_Auth_AccessControl::getUserRole();

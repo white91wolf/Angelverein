@@ -19,14 +19,15 @@ class Application_Model_Forms_DienstplanForm extends Zend_Form {
             'label' => 'Beschreibung/Ort der Tätigkeit',
             'required' => true
         ));
-       
+        //TODO breite und höhe der textarea kann auch mit css gemacht werden
+        $text->setOptions(array('cols' => '50', 'rows' => '6'));
         $text->addFilter(new HTMLPurifier_HTMLFilter());
         $this->addElement($text);
 
         //----------------------------------------------------------------------
         
         $hours = new Zend_Form_Element_Text('hours', array(
-            'label' => 'Zeitaufwand',
+            'label' => 'Zeitaufwand in Stunden',
             'required' => true
         ));
         //TODO only Zahlen

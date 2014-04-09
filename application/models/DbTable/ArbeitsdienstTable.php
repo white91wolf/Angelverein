@@ -14,6 +14,20 @@ class Application_Model_DbTable_ArbeitsdienstTable extends Zend_Db_Table_Abstrac
         
         return $rows;
     }
+    
+    public function getById($id = null) {
+        $rows = null;
+        
+        if (!empty($id)) {
+            $rows = $this->find($id);
+            
+            if(!empty($rows)){
+                $rows = $rows->current();
+            }
+        } 
+   
+        return $rows;
+    }
 
     public function getAllNotConfirmed() {
 
@@ -40,6 +54,18 @@ class Application_Model_DbTable_ArbeitsdienstTable extends Zend_Db_Table_Abstrac
         );
         
         return $key;
+    }
+    
+    public function confirmDienstById ($id = null){
+        if(!empty($id)){
+            $data = array(
+                'bestaetigt' => true
+            );
+
+            $where = $this->getAdapter()->quoteInto('id = ?', $id);
+            
+            $this->update($data, $where);
+        }
     }
     
 
