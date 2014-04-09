@@ -57,6 +57,8 @@ class Application_Model_DbTable_ArbeitsdienstTable extends Zend_Db_Table_Abstrac
     }
     
     public function confirmDienstById ($id = null){
+        $rowscount = 0;
+        
         if(!empty($id)){
             $data = array(
                 'bestaetigt' => true
@@ -64,8 +66,14 @@ class Application_Model_DbTable_ArbeitsdienstTable extends Zend_Db_Table_Abstrac
 
             $where = $this->getAdapter()->quoteInto('id = ?', $id);
             
-            $this->update($data, $where);
+            $rowscount = $this->update($data, $where);
+            
+            
         }
+        
+        return ($rowscount == 1);
+        //return (bool)$rownscount; 
+
     }
     
 

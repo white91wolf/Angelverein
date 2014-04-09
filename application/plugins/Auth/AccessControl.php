@@ -92,7 +92,7 @@ class Application_Plugin_Auth_AccessControl extends Zend_Controller_Plugin_Abstr
     }
 
     public function preDispatch(Zend_Controller_Request_Abstract $request) {
-
+        //var_dump($this->_auth->getIdentity());die();
         if ($this->_auth->hasIdentity() && is_object($this->_auth->getIdentity())) {
             $role = $this->_auth->getIdentity()->role;
         } else {
@@ -107,9 +107,11 @@ class Application_Plugin_Auth_AccessControl extends Zend_Controller_Plugin_Abstr
         if (!$this->_acl->has($controller)) {
             $controller = 'default_index';
         }
+        //TODO viel freude beim acl schreiben
+        /*
         if (!$this->_acl->isAllowed($role, $controller, $action)) {
             if ($this->_auth->hasIdentity()) {
-                $request->setModuleName('default');
+                $request->setModuleName('backend');
                 $request->setControllerName('error');
                 $request->setActionName('erroracl');
             } else {
@@ -119,7 +121,7 @@ class Application_Plugin_Auth_AccessControl extends Zend_Controller_Plugin_Abstr
                 $request->setActionName('requiredlogin');
                 $request->setParam('redirect_after_login', $request->getControllerName() . '/' . $action . '/' . $query);
             }
-        }
+        }*/
     }
 
 }
