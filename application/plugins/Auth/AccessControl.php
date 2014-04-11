@@ -108,7 +108,7 @@ class Application_Plugin_Auth_AccessControl extends Zend_Controller_Plugin_Abstr
             $controller = 'default_index';
         }
         //TODO viel freude beim acl schreiben
-        /*
+        
         if (!$this->_acl->isAllowed($role, $controller, $action)) {
             if ($this->_auth->hasIdentity()) {
                 $request->setModuleName('backend');
@@ -121,7 +121,7 @@ class Application_Plugin_Auth_AccessControl extends Zend_Controller_Plugin_Abstr
                 $request->setActionName('requiredlogin');
                 $request->setParam('redirect_after_login', $request->getControllerName() . '/' . $action . '/' . $query);
             }
-        }*/
+        }
     }
 
 }
