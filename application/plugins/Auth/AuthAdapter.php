@@ -1,7 +1,6 @@
 <?php
 
 class Application_Plugin_Auth_AuthAdapter extends Zend_Auth_Adapter_DbTable {
-
     protected $_roleTable = 'rolle';
     protected $_roleTableRoleName = 'name';
     protected $_userTableForeign = 'rolle_id';
