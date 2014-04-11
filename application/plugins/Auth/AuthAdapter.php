@@ -10,13 +10,9 @@ class Application_Plugin_Auth_AuthAdapter extends Zend_Auth_Adapter_DbTable {
         $dbAdapter = Zend_Db_Table::getDefaultAdapter();
         parent::__construct($dbAdapter);
         
-        $this->init();
-    }
-
-    private function init() {
         $this->setupTable();
     }
-    
+
     private function setupTable() {
         $this->setTableName('user');
         $this->setIdentityColumn('username');
