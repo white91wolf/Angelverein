@@ -54,5 +54,9 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap {
                 ->uienable();
         //$view->jQuery()->addStylesheet($view->baseUrl().'');
     }
-
+    
+    protected function _initConfig() {
+        $config = new Zend_Config_Ini(APPLICATION_PATH."/configs/config.ini");
+        Zend_Registry::set('appConfig', $config);
+    }
 }
