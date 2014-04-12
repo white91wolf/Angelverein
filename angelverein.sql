@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: 127.0.0.1
--- Erstellungszeit: 04. Apr 2014 um 21:44
+-- Erstellungszeit: 12. Apr 2014 um 20:08
 -- Server Version: 5.6.16
 -- PHP-Version: 5.5.9
 
@@ -104,7 +104,7 @@ CREATE TABLE IF NOT EXISTS `fangliste` (
   KEY `datum` (`datum`),
   KEY `user_id_2` (`user_id`),
   KEY `gewaesser_id` (`gewaesser_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=6 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=5 ;
 
 --
 -- Daten für Tabelle `fangliste`
@@ -264,14 +264,15 @@ CREATE TABLE IF NOT EXISTS `user` (
   `aboutme` varchar(510) DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `rolle_id` (`rolle_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=2 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=3 ;
 
 --
 -- Daten für Tabelle `user`
 --
 
 INSERT INTO `user` (`id`, `username`, `vorname`, `nachname`, `password`, `rolle_id`, `email`, `gebutsdatum`, `userimage`, `freigeschaltet`, `aboutme`) VALUES
-(1, 'admin', 'admin', 'admin', '123456', 2, 'admin@admin.de', '2014-03-19', NULL, 1, NULL);
+(1, 'admin', 'admin', 'admin', '123456', 2, 'admin@admin.de', '2014-03-19', NULL, 1, NULL),
+(2, 'test', 'vorname', 'nachname', '7110eda4d09e062aa5e4a390b0a572ac0d2c0220', 1, 'test@sunchaser-aussies.de', NULL, NULL, 1, NULL);
 
 --
 -- Constraints der exportierten Tabellen
@@ -293,8 +294,8 @@ ALTER TABLE `bilder`
 -- Constraints der Tabelle `content`
 --
 ALTER TABLE `content`
-  ADD CONSTRAINT `content_user` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  ADD CONSTRAINT `content_contenttype` FOREIGN KEY (`type_id`) REFERENCES `content_type` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+  ADD CONSTRAINT `content_contenttype` FOREIGN KEY (`type_id`) REFERENCES `content_type` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `content_user` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Constraints der Tabelle `fangliste`
@@ -314,15 +315,15 @@ ALTER TABLE `fangliste_eintrag`
 -- Constraints der Tabelle `termin_rolle`
 --
 ALTER TABLE `termin_rolle`
-  ADD CONSTRAINT `terminrolle_termin` FOREIGN KEY (`termin_id`) REFERENCES `termin` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  ADD CONSTRAINT `terminrolle_rolle` FOREIGN KEY (`rolle_id`) REFERENCES `rolle` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+  ADD CONSTRAINT `terminrolle_rolle` FOREIGN KEY (`rolle_id`) REFERENCES `rolle` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `terminrolle_termin` FOREIGN KEY (`termin_id`) REFERENCES `termin` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Constraints der Tabelle `termin_user`
 --
 ALTER TABLE `termin_user`
-  ADD CONSTRAINT `terminuser_user` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  ADD CONSTRAINT `terminuser_termin` FOREIGN KEY (`termin_id`) REFERENCES `termin` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+  ADD CONSTRAINT `terminuser_termin` FOREIGN KEY (`termin_id`) REFERENCES `termin` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `terminuser_user` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Constraints der Tabelle `user`
