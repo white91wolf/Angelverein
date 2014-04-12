@@ -87,4 +87,8 @@ class Backend_UserController extends Zend_Controller_Action {
         $this->view->form = $form;
         $this->view->registred = $registred;
     }
+    
+    public function requiredloginAction() {
+        die("DIE MOTHERFUCKER DIE!!!");
+    }
 }

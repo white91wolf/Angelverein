@@ -54,13 +54,17 @@ class Application_Plugin_Auth_AccessControl extends Zend_Controller_Plugin_Abstr
 
     public function routeStartup(Zend_Controller_Request_Abstract $request) {
         $loginForm = new Application_Model_Forms_UserLoginForm();
+
         if (!$this->_auth->hasIdentity() && $loginForm->isValid($_POST)) {
             $filter = new Zend_Filter_StripTags();
             $username = $filter->filter($loginForm->getValue('login_user'));
             $password = $filter->filter($loginForm->getValue('login_password'));
 
             if (!(empty($username) || empty($password))) {
-                $authAdapter = new Application_Plugin_Auth_AuthAdapter();
+                $authAdapter = new Application_Plugin_Auth_AuthAdapter(
+                    Zend_Registry::get('appConfig')->toArray()["permission"]["acl"]
+                );
+                
                 $authAdapter->setIdentity($username);
                 $authAdapter->setCredential($password);
                 $result = $this->_auth->authenticate($authAdapter);
@@ -70,7 +74,7 @@ class Application_Plugin_Auth_AccessControl extends Zend_Controller_Plugin_Abstr
                     $message = $messages[0];
                 } else {
                     if ($loginForm->getValue('rememberlogin') == 1) {
-                        Zend_Session::rememberMe(604800); // 7 Tage Login merken
+                        Zend_Session::rememberMe(Zend_Registry::get('appConfig')->general->session->lifetime); // 7 Tage Login merken
                     } else {
                         Zend_Session::forgetMe();
                     }
@@ -79,14 +83,12 @@ class Application_Plugin_Auth_AccessControl extends Zend_Controller_Plugin_Abstr
                     $storage->write($authAdapter->getResultRowObject(null, 'password'));
 
 
-                    if (($redirect = $request->getParam('redirect_after_login')) == null) {
-                        $redirect = 'serie/index';
+                    if (($redirect = $request->getParam('redirect')) == null) {
+                        $redirect = Zend_Registry::get('appConfig')->permission->redirect->afterlogin;
                     }
 
                     Zend_Controller_Action_HelperBroker::getStaticHelper('Redirector')->gotoUrl($redirect);
                 }
-
-                $registry = Zend_Registry::getInstance();
             }
         }
     }
@@ -98,30 +100,48 @@ class Application_Plugin_Auth_AccessControl extends Zend_Controller_Plugin_Abstr
         } else {
             $role = 'guest';
         }
+        
         $module = $request->getModuleName();
         $controller = $module . '_' . $request->getControllerName();
 
 
         $action = $request->getActionName();
 
-        if (!$this->_acl->has($controller)) {
-            $controller = 'default_index';
-        }
-        //TODO viel freude beim acl schreiben
-        
-        if (!$this->_acl->isAllowed($role, $controller, $action)) {
+        if (!$this->_acl->has($controller) || !$this->_acl->isAllowed($role, $controller, $action)) {
             if ($this->_auth->hasIdentity()) {
-                $request->setModuleName('backend');
-                $request->setControllerName('error');
-                $request->setActionName('erroracl');
+                $this->isNotAllowed($request);
             } else {
+                $this->isNotLoggedIn($request);
+                
                 $query = http_build_query($request->getQuery());
-                $request->setModuleName('default');
-                $request->setControllerName('user');
-                $request->setActionName('requiredlogin');
-                $request->setParam('redirect_after_login', $request->getControllerName() . '/' . $action . '/' . $query);
+                $request->setParam('redirect', $request->getControllerName() . '/' . $action . '/' . $query);
             }
         }
     }
+    
+    private function getParts($path) {
+        $parts = explode('/', $path);
+        
+        if(!is_array($parts) || count($parts) < 3) {
+            throw new Exception('missconfigured config.ini');
+        }
+        
+        return $parts;
+    }
 
+    private function isNotAllowed($request) {
+        $parts = $this->getParts(Zend_Registry::get('appConfig')->permission->path->isNotAllowed);
+        $this->setUpRequest($request, $parts);
+    }
+
+    private function isNotLoggedIn($request) {
+        $parts = $this->getParts(Zend_Registry::get('appConfig')->permission->path->istNotLoggedIn);
+        $this->setUpRequest($request, $parts);
+    }
+
+    private function setUpRequest($request, $parts) {
+        $request->setModuleName($parts[0]);
+        $request->setControllerName($parts[1]);
+        $request->setActionName($parts[2]);
+    }
 }

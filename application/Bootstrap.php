@@ -9,6 +9,11 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap {
         $front = $this->getResource('frontController');
         $front->setParam('useDefaultControllerAlways', true);
     }
+    
+    protected function _initConfig() {
+        $config = new Zend_Config_Ini(APPLICATION_PATH."/configs/config.ini");
+        Zend_Registry::set('appConfig', $config);
+    }
 
     protected function _initDoctype() {
         $this->bootstrap('view');
@@ -37,7 +42,8 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap {
     protected function _initAuth() {
         $this->bootstrap('frontController');
         $auth = Zend_Auth::getInstance();
-        $acl = new Application_Plugin_Auth_Acl();
+        //$acl = new Application_Plugin_Auth_Acl();
+        $acl = new Application_Plugin_Auth_AclReader(Zend_Registry::get('appConfig')->permission->path->aclConfig);
         $this->getResource('frontController')->registerPlugin(new Application_Plugin_Auth_AccessControl($auth, $acl))->setParam('auth', $auth);
 
         return $acl;
@@ -53,10 +59,5 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap {
                 ->setUiVersion('1.10.3')
                 ->uienable();
         //$view->jQuery()->addStylesheet($view->baseUrl().'');
-    }
-    
-    protected function _initConfig() {
-        $config = new Zend_Config_Ini(APPLICATION_PATH."/configs/config.ini");
-        Zend_Registry::set('appConfig', $config);
     }
 }

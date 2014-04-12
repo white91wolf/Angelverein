@@ -92,9 +92,6 @@ class Backend_FanglisteController extends Zend_Controller_Action {
 
     
     public function createAction() {
-        if (!$this->getRequest()->isPost()) {
-            $this->view->headScript()->appendFile($this->view->baseUrl() . '/resource/js/catchlist.js'); // TODO pfad irgendwo einheitlich notieren
-        }
         $c = 1;
 
         if ($this->getRequest()->isPost() && isset($_POST['group_counter'])) {

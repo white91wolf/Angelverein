@@ -5,18 +5,22 @@ class Application_Plugin_Auth_AuthAdapter extends Zend_Auth_Adapter_DbTable {
     protected $_roleTableRoleName = 'name';
     protected $_userTableForeign = 'rolle_id';
 
-    public function __construct() {
+    public function __construct($arr = array()) {
         $dbAdapter = Zend_Db_Table::getDefaultAdapter();
         parent::__construct($dbAdapter);
         
-        $this->setupTable();
-    }
-
-    private function setupTable() {
-        $this->setTableName('user');
-        $this->setIdentityColumn('username');
-        $this->setCredentialColumn('password');
-        $this->setCredentialTreatment('SHA1(?)');
+        if(empty($arr) || !is_array($arr)) {
+            throw new Exception('AclAuthAdapter: the given parameter \'arr\' is not an array or is null');
+        }
+        
+        $this->setTableName($arr['userTable']);
+        $this->setIdentityColumn($arr['identityColumn']);
+        $this->setCredentialColumn($arr['credentialColumn']);
+        $this->setCredentialTreatment($arr['credentialTreatment']);
+        
+        $this->_roleTable = $arr['roleTable'];
+        $this->_roleTableRoleName = $arr['roleNameColumn'];
+        $this->_userTableForeign = $arr['userRoleIdColumn'];
     }
 
     protected function _authenticateCreateSelect() {
