@@ -10,6 +10,7 @@ class Application_Plugin_Auth_AccessControl extends Zend_Controller_Plugin_Abstr
         $this->_acl = $acl;
     }
 
+    // TODO rewrite!
     public static function getUserName() {
         try {
             if (isset(Zend_Auth::getInstance()->getStorage()->read()->nickname)) {

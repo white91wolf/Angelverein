@@ -7,8 +7,8 @@
 <?php 
 	echo $this->headTitle(); 
 	echo $this->headLink()
-		->appendStylesheet($this->baseUrl().'/styles/style.css')
-		->appendStylesheet($this->baseUrl().'/jquery/css/ui-lightness/jquery-ui-1.10.3.custom.css')
+		->appendStylesheet($this->baseUrl().'/resource/css/design.css')
+		->appendStylesheet($this->baseUrl().'/resource/jquery-ui/smoothness/jquery-ui-1.10.4.custom.css')
 		->appendStylesheet($this->baseUrl().'/fancybox/jquery.fancybox.css');
         
 	
@@ -28,16 +28,13 @@
 			});
 			
 			$('header nav, header h1 a').tooltip();
-			
-			$('#main').hide();
-			$('#main').fadeIn();
 		});
 	</script>
  </head>
 <body>
 	<header id="header">
 		<div class="inline">
-			<h1><a title="Startseite" href="<?php echo $this->baseUrl() ?>">Serienlist</a></h1>
+                    <h1><a title="Startseite" href="<?php echo $this->baseUrl() ?>"><?php echo Zend_Registry::get('appConfig')->general->page->title ?></a></h1>
 			<nav id="user_navigation">
 				<?php 
 					echo $this->navigation()->menu()->renderMenu($this->user_menu); 
@@ -68,43 +65,6 @@
 		?>
 	</div>
 	<footer>
-		<p>
-			<?php
-				echo $this->partial('partial/html_anchor.phtml', array(
-					'text' => $this->partial('partial/html_image.phtml', array(
-						'src' => 'content/jquery.png', 
-						'width' => '204', 
-						'height' => '51', 
-						'alt' => 'jQuery')
-					),
-					'href' => 'http://jquery.com',
-					'noescape' => true,
-					'nobaseurl' => true
-				));
-				echo $this->partial('partial/html_anchor.phtml', array(
-					'text' => $this->partial('partial/html_image.phtml', array(
-						'src' => 'content/jquery-ui.png', 
-						'width' => '211', 
-						'height' => '51', 
-						'alt' => 'jQuery UI')
-					),
-					'href' => 'http://jqueryui.com/',
-					'noescape' => true,
-					'nobaseurl' => true
-				));
-				echo $this->partial('partial/html_anchor.phtml', array(
-					'text' => $this->partial('partial/html_image.phtml', array(
-						'src' => 'content/zend-framework.png', 
-						'width' => '165', 
-						'height' => '51', 
-						'alt' => 'Zend Framework')
-					),
-					'href' => 'http://framework.zend.com/',
-					'noescape' => true,
-					'nobaseurl' => true
-				));
-			?>
-		</p>
 		<p>2013 &copy; by Florian Vogelpohl &amp; Stefan Wolf - <a href="<?php echo $this->baseUrl() ?>/index/impressum">Impressum</a></p>
 		<p>Bilder von <a href="http://sxc.hu">sxc.hu - Free Stock Photos</a> und <a href="http://openiconlibrary.sourceforge.net/">Open Icon Library</a></p>
 	</footer>
