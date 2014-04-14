@@ -1,9 +1,10 @@
 <?php
 
 class Application_Plugin_Auth_AuthAdapter extends Zend_Auth_Adapter_DbTable {
-    protected $_roleTable = 'rolle';
-    protected $_roleTableRoleName = 'name';
-    protected $_userTableForeign = 'rolle_id';
+    protected $_roleTable;
+    protected $_roleTableRoleName;
+    protected $_userTableForeign;
+    protected $_userNameColumn;
 
     public function __construct($arr = array()) {
         $dbAdapter = Zend_Db_Table::getDefaultAdapter();
@@ -21,17 +22,49 @@ class Application_Plugin_Auth_AuthAdapter extends Zend_Auth_Adapter_DbTable {
         $this->_roleTable = $arr['roleTable'];
         $this->_roleTableRoleName = $arr['roleNameColumn'];
         $this->_userTableForeign = $arr['userRoleIdColumn'];
+        $this->_userNameColumn = $arr['userTableUsernameColumn'];
     }
 
     protected function _authenticateCreateSelect() {
-        $select = parent::_authenticateCreateSelect();
+        $select = clone $this->getDbSelect();
 
-        $select->join(
-            array('r' => $this->_roleTable),
-            'r.id = ' . $this->_tableName . '.' . $this->_userTableForeign,
-            array('role' => $this->_roleTableRoleName)
+        $select->from(
+                $this->_tableName,
+                array(
+                    'username' => $this->_userNameColumn,
+                    '*'
+                )
+            )->where(
+                    $this->_zendDb->quoteIdentifier($this->_identityColumn, true) . '= ?', 
+                    $this->_identity
+            )->join(
+                array(
+                    'r' => $this->_roleTable
+                ),
+                'r.id = ' . $this->_tableName . '.' . $this->_userTableForeign,
+                array(
+                    'role' => $this->_roleTableRoleName
+                )
         );
-        
+
         return $select;
+    }
+    
+    // Source: https://github.com/rumeau/zf1-authadapter-dbtablebcrypt/blob/master/Jr/Auth/Adapter/DbTableBcrypt.php
+    protected function _authenticateValidateResult($resultIdentity) {
+        $bcrypt = new Zend2_Crypt_Password_Bcrypt();
+ 
+        if(!$bcrypt->verify($this->_credential, $resultIdentity[$this->_credentialColumn])) {
+            $this->_authenticateResultInfo['code'] = Zend_Auth_Result::FAILURE_CREDENTIAL_INVALID; 
+            $this->_authenticateResultInfo['messages'][] = 'Supplied credential is invalid.';
+            return $this->_authenticateCreateAuthResult();
+        }
+        
+        unset($resultIdentity[$this->_credentialColumn]);
+    	$this->_resultRow = $resultIdentity;
+    
+    	$this->_authenticateResultInfo['code'] = Zend_Auth_Result::SUCCESS;
+    	$this->_authenticateResultInfo['messages'][] = 'Authentication successful.';
+    	return $this->_authenticateCreateAuthResult();
     }
 }

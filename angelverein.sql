@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 4.1.6
+-- version 4.0.9
 -- http://www.phpmyadmin.net
 --
 -- Host: 127.0.0.1
--- Erstellungszeit: 12. Apr 2014 um 20:08
--- Server Version: 5.6.16
--- PHP-Version: 5.5.9
+-- Erstellungszeit: 14. Apr 2014 um 11:17
+-- Server Version: 5.6.14
+-- PHP-Version: 5.5.6
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET time_zone = "+00:00";
@@ -19,6 +19,8 @@ SET time_zone = "+00:00";
 --
 -- Datenbank: `angelverein`
 --
+CREATE DATABASE IF NOT EXISTS `angelverein` DEFAULT CHARACTER SET latin1 COLLATE latin1_swedish_ci;
+USE `angelverein`;
 
 -- --------------------------------------------------------
 
@@ -191,9 +193,8 @@ CREATE TABLE IF NOT EXISTS `rolle` (
 --
 
 INSERT INTO `rolle` (`id`, `name`) VALUES
-(1, 'user'),
-(2, 'admin'),
-(3, 'hgf');
+(1, 'Mitglied'),
+(2, 'Vorstand');
 
 -- --------------------------------------------------------
 
@@ -255,7 +256,7 @@ CREATE TABLE IF NOT EXISTS `user` (
   `username` varchar(50) NOT NULL,
   `vorname` varchar(50) NOT NULL,
   `nachname` varchar(50) NOT NULL,
-  `password` varchar(255) NOT NULL,
+  `password` binary(60) NOT NULL,
   `rolle_id` int(11) NOT NULL DEFAULT '1',
   `email` varchar(255) NOT NULL,
   `gebutsdatum` date DEFAULT NULL,
@@ -271,8 +272,8 @@ CREATE TABLE IF NOT EXISTS `user` (
 --
 
 INSERT INTO `user` (`id`, `username`, `vorname`, `nachname`, `password`, `rolle_id`, `email`, `gebutsdatum`, `userimage`, `freigeschaltet`, `aboutme`) VALUES
-(1, 'admin', 'admin', 'admin', '123456', 2, 'admin@admin.de', '2014-03-19', NULL, 1, NULL),
-(2, 'test', 'vorname', 'nachname', '7110eda4d09e062aa5e4a390b0a572ac0d2c0220', 1, 'test@sunchaser-aussies.de', NULL, NULL, 1, NULL);
+(1, 'admin', 'admin', 'admin', '123456\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0', 2, 'admin@admin.de', '2014-03-19', NULL, 1, NULL),
+(2, 'Flo', 'dk', 'dk', '$2y$10$pN.pNONADESAVoII8buYsOJFGYzNgYwU8Q2XJpNi9cVrYCXAYkdyi', 1, 'flo@jo.de', NULL, NULL, 1, NULL);
 
 --
 -- Constraints der exportierten Tabellen

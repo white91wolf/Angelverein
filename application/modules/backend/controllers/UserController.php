@@ -65,12 +65,13 @@ class Backend_UserController extends Zend_Controller_Action {
                      * User in DB festschreiben 
                      */
                     //var_dump($form);die();
+                    $bcrypt = new Zend2_Crypt_Password_Bcrypt();
                     
                     $user = $this->userTable->createRow();
                     $user->username = $username;
                     $user->email = $mail;
-                    //TODO password besser verschlüsseln
-                    $user->password = sha1($form->getValue('password'));
+                    //TODO password besser verschlüsseln - nutzt nun bcrypt - brauch aber php 5.3 +
+                    $user->password = $bcrypt->create($form->getValue('password'));
                     $user->vorname = $form->getValue('vorname');
                     $user->nachname = $form->getValue('nachname');
                     $user->save();
