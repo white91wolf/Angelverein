@@ -71,11 +71,14 @@ class Backend_DienstplanController extends Zend_Controller_Action {
     
     //TODO in adminbereich packen
     public function confirmdienstAction() {
-        if($this->currentUserRole == 'vorstand' && isset($_POST['dienstid'])) {
+        $confirmed = false;
+        if($this->currentUserRole == 'Vorstand' && isset($_GET['dienstid'])) {
             $dienstid = $this->request->getParam('dienstid');
             $this->dienstTable->confirmDienstById($dienstid);
+            
+            $confirmed = true; 
         }
-        
+        $this->view->confirmed = $confirmed;
     }
 
     private function getForm() {
