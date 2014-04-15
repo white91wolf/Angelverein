@@ -14,7 +14,6 @@ class Application_Model_DbTable_FanglisteTable extends Zend_Db_Table_Abstract {
                 $rows = $rows->current();
             }
         } 
-        var_dump($rows); die();
         return $rows;
     }
     

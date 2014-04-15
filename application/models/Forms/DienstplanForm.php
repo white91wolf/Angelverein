@@ -6,6 +6,7 @@ class Application_Model_Forms_DienstplanForm extends Zend_Form {
 
         $date = new ZendX_JQuery_Form_Element_DatePicker('date', array(
             'label' => 'Datum der Tätigkeit',
+            'jQueryParams' => array('dateFormat' => 'dd.mm.yy'),
             'required' => true
         ));
         

@@ -101,7 +101,7 @@ class Application_Plugin_Auth_AccessControl extends Zend_Controller_Plugin_Abstr
         } else {
             $role = 'guest';
         }
-
+//die($role);  //rollencheck
         $module = $request->getModuleName();
         $controller = strtolower($module . '_' . $request->getControllerName());
         $action = strtolower($request->getActionName());

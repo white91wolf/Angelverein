@@ -38,18 +38,20 @@ class Application_Model_DbTable_ArbeitsdienstTable extends Zend_Db_Table_Abstrac
     }
     
     public function createNewContent($description, $hours, $date, $userid) {
-        if(empty($date) || !($date instanceof Date)) {
-            $date = new Date();
+        if(empty($date)) {
+            $date = new DateTime();
+        }else{
+            $date = new DateTime($date);
         }
-        
+               
         // TODO indexe des arrays mit DB table abgleichen
         // TODO auf null pruefen, evtl. validation
         $key = $this->insert(
                 array(
                     'beschreibung' => $description,
                     'stunden' => (int)$hours,
-                    'user_id' => (int)$user_id,
-                    'datum' => $date
+                    'user_id' => (int)$userid,
+                    'datum' => $date->format('Y-m-d')
                 )
         );
         

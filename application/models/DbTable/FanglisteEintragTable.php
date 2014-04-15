@@ -22,7 +22,7 @@ class Application_Model_DbTable_FanglisteEintragTable extends Zend_Db_Table_Abst
         $rows = null;
         
         if ($id != null) {
-            $select = $this->select()->where('fanglist_id = ?', $id);
+            $select = $this->select()->where('fangliste_id = ?', $id);
             $rows = $this->fetchAll($select); 
         } 
         
@@ -42,4 +42,12 @@ class Application_Model_DbTable_FanglisteEintragTable extends Zend_Db_Table_Abst
         
         return $key;
     }
+    
+    public function deleteAllByFangId($fanglisteId = null){
+        if(!empty($fanglisteId)){
+            $where = $this->select()->where('fangliste_id = ?', $fanglisteId);
+            $this->delete($where);
+        }
+    }
+            
 }

@@ -8,8 +8,10 @@ class Backend_DienstplanController extends Zend_Controller_Action {
     protected $dienstTable;
     protected $form;
     protected $request;
+    protected $isAdmin;
 
     public function init() {
+        $this->isAdmin = false;
         $this->request = $this->getRequest();
         $this->currentUserID = Application_Plugin_Auth_AccessControl::getUserID();
         $this->currentUserName = Application_Plugin_Auth_AccessControl::getUserName();
@@ -25,18 +27,19 @@ class Backend_DienstplanController extends Zend_Controller_Action {
     public function editAction() {
         $form = $this->getForm();
         $dienstArr = null;
-
-        if ($this->getRequest()->isPost() && isset($_POST['dienstid'])) {
+        
+        if (($this->request->isGet() || $this->request->isPost()) && isset($_GET['dienstid'])) {
             $dienstid = $this->request->getParam('dienstid');
             $dienst = $this->dienstTable->getById($dienstid);
 
-            if (!empty($dienst)) {
-                if ($form->isValid($_POST)) {
+            if (!empty($dienst) && ($dienst->user_id == $this->currentUserID || $this->isAdmin)) {
+                if ($this->request->isPost() && $form->isValid($_POST)) {
                     $dienst->datum = $form->getValue('date');
                     $dienst->beschreibung = $form->getValue('description');
                     $dienst->stunden = $form->getValue('hours');
-                    //TODO meinung von flo und so geht darum, dass wenn jemand aus 2 stunden zb. 20 macht
+                    
                     $dienst->bestaetigt = false;
+                    $dienst->save();
                 }
                 
                 $form->getElement('date')->setValue($dienst->datum);
@@ -57,13 +60,16 @@ class Backend_DienstplanController extends Zend_Controller_Action {
             $date = $form->getValue('date');
             $description = $form->getValue('description');
             $hours = $form->getValue('hours');
-
+            //echo($description .'  -  '. $hours.'  -  '. $date.'  -  '. $this->currentUserID);die();
             $this->dienstTable->createNewContent($description, $hours, $date, $this->currentUserID);
+            
+            //TODO redirect auf übersicht oder so
         }
 
         $this->view->form = $form;
     }
     
+    //TODO in adminbereich packen
     public function confirmdienstAction() {
         if($this->currentUserRole == 'vorstand' && isset($_POST['dienstid'])) {
             $dienstid = $this->request->getParam('dienstid');
