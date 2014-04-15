@@ -13,8 +13,8 @@ class Application_Plugin_Auth_AccessControl extends Zend_Controller_Plugin_Abstr
     // TODO rewrite!
     public static function getUserName() {
         try {
-            if (isset(Zend_Auth::getInstance()->getStorage()->read()->nickname)) {
-                $username = Zend_Auth::getInstance()->getStorage()->read()->nickname;
+            if (isset(Zend_Auth::getInstance()->getStorage()->read()->username)) {
+                $username = Zend_Auth::getInstance()->getStorage()->read()->username;
             } else {
                 $username = null;
             }
@@ -101,12 +101,10 @@ class Application_Plugin_Auth_AccessControl extends Zend_Controller_Plugin_Abstr
         } else {
             $role = 'guest';
         }
-        
+
         $module = $request->getModuleName();
-        $controller = $module . '_' . $request->getControllerName();
-
-
-        $action = $request->getActionName();
+        $controller = strtolower($module . '_' . $request->getControllerName());
+        $action = strtolower($request->getActionName());
 
         if (!$this->_acl->has($controller) || !$this->_acl->isAllowed($role, $controller, $action)) {
             if ($this->_auth->hasIdentity()) {

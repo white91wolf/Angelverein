@@ -4,7 +4,7 @@ class Application_Plugin_Auth_AuthAdapter extends Zend_Auth_Adapter_DbTable {
     protected $_roleTable;
     protected $_roleTableRoleName;
     protected $_userTableForeign;
-    protected $_userNameColumn;
+    protected $_additionalWhere;
 
     public function __construct($arr = array()) {
         $dbAdapter = Zend_Db_Table::getDefaultAdapter();
@@ -22,7 +22,10 @@ class Application_Plugin_Auth_AuthAdapter extends Zend_Auth_Adapter_DbTable {
         $this->_roleTable = $arr['roleTable'];
         $this->_roleTableRoleName = $arr['roleNameColumn'];
         $this->_userTableForeign = $arr['userRoleIdColumn'];
-        $this->_userNameColumn = $arr['userTableUsernameColumn'];
+        
+        if(isset($arr['additionWhere'])) {
+            $this->_additionalWhere = $arr['additionWhere'];
+        }
     }
 
     protected function _authenticateCreateSelect() {
@@ -31,13 +34,19 @@ class Application_Plugin_Auth_AuthAdapter extends Zend_Auth_Adapter_DbTable {
         $select->from(
                 $this->_tableName,
                 array(
-                    'username' => $this->_userNameColumn,
+                    'username' => $this->_identityColumn,
                     '*'
                 )
             )->where(
                     $this->_zendDb->quoteIdentifier($this->_identityColumn, true) . '= ?', 
                     $this->_identity
-            )->join(
+            );
+        
+        if(!empty($this->_additionalWhere)) {
+            $select->where($this->_additionalWhere);
+        }
+                
+        $select->join(
                 array(
                     'r' => $this->_roleTable
                 ),
@@ -46,7 +55,7 @@ class Application_Plugin_Auth_AuthAdapter extends Zend_Auth_Adapter_DbTable {
                     'role' => $this->_roleTableRoleName
                 )
         );
-
+        
         return $select;
     }
     

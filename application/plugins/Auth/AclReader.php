@@ -50,7 +50,7 @@ class Application_Plugin_Auth_AclReader extends Zend_Acl {
                 $priviliges = $this->getPriviliges($actionList);
                 
                 $this->allow($role, $controller, $priviliges);
-            }
+            } 
         }
     }
 
@@ -61,10 +61,9 @@ class Application_Plugin_Auth_AclReader extends Zend_Acl {
      * @return \Zend_Acl_Resource
      */
     private function addController($controller) {
-        $controllerObj = null;
+        $controllerObj = new Zend_Acl_Resource($controller);
 
         if (!$this->has($controller)) {
-            $controllerObj = new Zend_Acl_Resource($controller);
             $this->addResource($controllerObj);
         }
 
@@ -79,11 +78,9 @@ class Application_Plugin_Auth_AclReader extends Zend_Acl {
      * @return \Zend_Acl_Role
      */
     private function addUserRole($role, $parent = null) {
-        $roleObj = null;
+        $roleObj = new Zend_Acl_Role($role);
 
         if (!$this->hasRole($role)) {
-            $roleObj = new Zend_Acl_Role($role);
-
             if (!empty($parent) || $parent instanceof Zend_Acl_Role || $this->hasRole($parent)) {
                 $this->addRole($roleObj, $parent);
             } else {

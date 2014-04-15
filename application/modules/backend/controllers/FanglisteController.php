@@ -107,11 +107,11 @@ class Backend_FanglisteController extends Zend_Controller_Action {
 
             $fanglistId = $this->fanglisteTable->createNewContent($this->currentUserID, $date, $gewaesser);
 
-            $fishtyp = $form->getValue('weight');
+            $fishtyp = $form->getValue('fishType');
             $count = $form->getValue('count_fishes');
-            $gewicht = $form->getValue('fishType');
+            $gewicht = $form->getValue('weight');
 
-            $count_form = count($fishtyp);
+            $count_form = count($fishtyp); 
             for ($i = 0; $i < $count_form; $i++) {
                 $this->fanglisteEintragTable->createNewContent($fishtyp[$i], $count[$i], $gewicht[$i], $fanglistId);
             }

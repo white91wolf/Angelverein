@@ -13,7 +13,7 @@ $(document).ready(function() {
 function addField() {
     $.ajax({
         type: "POST",
-        url: baseUrl + "/index.php/backend/Fangliste/newfishgroup/format/html",
+        url: baseUrl + "/index.php/backend/fangliste/newfishgroup/format/html",
         data: "counter=" + element_counter++,
         success: function(newGroup) {
             $("#submit-element").before(newGroup);
