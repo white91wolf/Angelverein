@@ -41,8 +41,10 @@ class Application_Model_DbTable_ContentTable extends Zend_Db_Table_Abstract {
     }
     
     public function createNewContent($headline, $content, $user_id, $type_id, $date = null) {
-        if(empty($date) || !($date instanceof Date)) {
-            $date = new Date();
+        if(empty($date)) {
+            $date = new DateTime();
+        }else{
+            $date = new DateTime($date);
         }
         
         // TODO indexe des arrays mit DB table abgleichen
@@ -53,7 +55,7 @@ class Application_Model_DbTable_ContentTable extends Zend_Db_Table_Abstract {
                     'text' => $content,
                     'user_id' => (int)$user_id,
                     'type_id' => (int)$type_id,
-                    'date' => $date
+                    'date' => $date->format('Y-m-d')
                 )
         );
         

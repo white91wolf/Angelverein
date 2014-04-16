@@ -27,25 +27,24 @@ class Backend_DienstplanController extends Zend_Controller_Action {
     public function editAction() {
         $form = $this->getForm();
         $dienstArr = null;
-        
+
         if (($this->request->isGet() || $this->request->isPost()) && isset($_GET['dienstid'])) {
             $dienstid = $this->request->getParam('dienstid');
             $dienst = $this->dienstTable->getById($dienstid);
 
-            if (!empty($dienst) && ($dienst->user_id == $this->currentUserID || $this->isAdmin)) {
+            if (!empty($dienst) && ($dienst->bestaetigt == false) && ($dienst->user_id == $this->currentUserID || $this->isAdmin)) {
                 if ($this->request->isPost() && $form->isValid($_POST)) {
                     $dienst->datum = $form->getValue('date');
                     $dienst->beschreibung = $form->getValue('description');
                     $dienst->stunden = $form->getValue('hours');
-                    
+
                     $dienst->bestaetigt = false;
                     $dienst->save();
                 }
-                
+
                 $form->getElement('date')->setValue($dienst->datum);
                 $form->getElement('description')->setValue($dienst->beschreibung);
                 $form->getElement('hours')->setValue($dienst->stunden);
-               
             }
         }
 
@@ -62,21 +61,21 @@ class Backend_DienstplanController extends Zend_Controller_Action {
             $hours = $form->getValue('hours');
             //echo($description .'  -  '. $hours.'  -  '. $date.'  -  '. $this->currentUserID);die();
             $this->dienstTable->createNewContent($description, $hours, $date, $this->currentUserID);
-            
+
             //TODO redirect auf übersicht oder so
         }
 
         $this->view->form = $form;
     }
-    
+
     //TODO in adminbereich packen
     public function confirmdienstAction() {
         $confirmed = false;
-        if($this->currentUserRole == 'Vorstand' && isset($_GET['dienstid'])) {
+        if ($this->currentUserRole == 'Vorstand' && isset($_GET['dienstid'])) {
             $dienstid = $this->request->getParam('dienstid');
             $this->dienstTable->confirmDienstById($dienstid);
-            
-            $confirmed = true; 
+
+            $confirmed = true;
         }
         $this->view->confirmed = $confirmed;
     }

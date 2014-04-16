@@ -29,18 +29,18 @@ class Application_Model_DbTable_FanglisteTable extends Zend_Db_Table_Abstract {
     }
     
     public function createNewContent($userId, $date, $gewaesser) {
-        // TODO Date pruefug hinzufuegen.. Klasse DateTime!
-        /*
-        if(empty($date) || !($date instanceof Date)) {
-            $date = new Date();
-        }*/
+        if(empty($date)) {
+            $date = new DateTime();
+        }else{
+            $date = new DateTime($date);
+        }
         
         // TODO auf null pruefen, evtl. validation
         $key = $this->insert(
                 array(
                     'user_id' => $userId,
                     'gewaesser_id' => $gewaesser,
-                    'datum' => $date
+                    'datum' => $date->format('Y-m-d')
                 )
         );
         
