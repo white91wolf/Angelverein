@@ -24,7 +24,26 @@ class Application_Plugin_Auth_AccessControl extends Zend_Controller_Plugin_Abstr
 
         return $username;
     }
+    /* //Möglichkeit dynamisches read zu machen !
+    public static function getUser() {
+       die(var_dump(Zend_Auth::getInstance()->getStorage()->read()));
+    }
+*/
+    
+    public static function getUserRoleID() {
+        try {
+            if (isset(Zend_Auth::getInstance()->getStorage()->read()->rolle_id)) {
+                $roleId = Zend_Auth::getInstance()->getStorage()->read()->rolle_id;
+            } else {
+                $roleId = null;
+            }
+        } catch (Exception $e) {
+            $roleId = null;
+        }
 
+        return $roleId;
+    }
+    
     public static function getUserID() {
         try {
             if (isset(Zend_Auth::getInstance()->getStorage()->read()->id)) {

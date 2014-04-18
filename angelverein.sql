@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 4.0.9
+-- version 4.0.4.1
 -- http://www.phpmyadmin.net
 --
 -- Host: 127.0.0.1
--- Erstellungszeit: 14. Apr 2014 um 11:17
--- Server Version: 5.6.14
--- PHP-Version: 5.5.6
+-- Erstellungszeit: 18. Apr 2014 um 18:28
+-- Server Version: 5.5.32
+-- PHP-Version: 5.4.16
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET time_zone = "+00:00";
@@ -37,7 +37,14 @@ CREATE TABLE IF NOT EXISTS `arbeitsdienst` (
   `bestaetigt` tinyint(1) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`),
   KEY `user_id` (`user_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=8 ;
+
+--
+-- Daten für Tabelle `arbeitsdienst`
+--
+
+INSERT INTO `arbeitsdienst` (`id`, `stunden`, `beschreibung`, `user_id`, `datum`, `bestaetigt`) VALUES
+(7, 6, 'Viel an dieser Seite v2', 2, '2014-04-15', 1);
 
 -- --------------------------------------------------------
 
@@ -113,7 +120,7 @@ CREATE TABLE IF NOT EXISTS `fangliste` (
 --
 
 INSERT INTO `fangliste` (`id`, `user_id`, `datum`, `gewaesser_id`) VALUES
-(4, 1, '2014-04-03 19:47:15', 1);
+(4, 2, '2014-04-03 19:47:15', 1);
 
 -- --------------------------------------------------------
 
@@ -130,7 +137,14 @@ CREATE TABLE IF NOT EXISTS `fangliste_eintrag` (
   PRIMARY KEY (`id`),
   KEY `fisch_id` (`fisch_id`),
   KEY `fangliste_id` (`fangliste_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=2 ;
+
+--
+-- Daten für Tabelle `fangliste_eintrag`
+--
+
+INSERT INTO `fangliste_eintrag` (`id`, `fisch_id`, `anzahl`, `gewicht`, `fangliste_id`) VALUES
+(1, 2, 12, 21, 4);
 
 -- --------------------------------------------------------
 
@@ -179,6 +193,21 @@ INSERT INTO `gewaesser` (`id`, `name`) VALUES
 -- --------------------------------------------------------
 
 --
+-- Tabellenstruktur für Tabelle `resetpassword`
+--
+
+CREATE TABLE IF NOT EXISTS `resetpassword` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `hash` varchar(255) NOT NULL,
+  `used` tinyint(1) NOT NULL DEFAULT '0',
+  `user_id` int(11) NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `user_id` (`user_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+
+-- --------------------------------------------------------
+
+--
 -- Tabellenstruktur für Tabelle `rolle`
 --
 
@@ -186,7 +215,7 @@ CREATE TABLE IF NOT EXISTS `rolle` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(50) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=4 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=3 ;
 
 --
 -- Daten für Tabelle `rolle`
@@ -211,7 +240,14 @@ CREATE TABLE IF NOT EXISTS `termin` (
   `name` varchar(255) NOT NULL,
   `anmeldung` tinyint(1) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=16 ;
+
+--
+-- Daten für Tabelle `termin`
+--
+
+INSERT INTO `termin` (`id`, `erstelldatum`, `datum`, `uhrzeit`, `beschreibung`, `name`, `anmeldung`) VALUES
+(15, '2014-04-16 16:01:01', '2014-04-28', '00:00:00', 'asd213', '123Testtermin', 1);
 
 -- --------------------------------------------------------
 
@@ -226,7 +262,14 @@ CREATE TABLE IF NOT EXISTS `termin_rolle` (
   PRIMARY KEY (`id`),
   KEY `rolle_id` (`rolle_id`),
   KEY `termin_id` (`termin_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=11 ;
+
+--
+-- Daten für Tabelle `termin_rolle`
+--
+
+INSERT INTO `termin_rolle` (`id`, `rolle_id`, `termin_id`) VALUES
+(10, 1, 15);
 
 -- --------------------------------------------------------
 
@@ -265,7 +308,7 @@ CREATE TABLE IF NOT EXISTS `user` (
   `aboutme` varchar(510) DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `rolle_id` (`rolle_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=3 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=4 ;
 
 --
 -- Daten für Tabelle `user`
@@ -273,7 +316,8 @@ CREATE TABLE IF NOT EXISTS `user` (
 
 INSERT INTO `user` (`id`, `username`, `vorname`, `nachname`, `password`, `rolle_id`, `email`, `gebutsdatum`, `userimage`, `freigeschaltet`, `aboutme`) VALUES
 (1, 'admin', 'admin', 'admin', '123456\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0', 2, 'admin@admin.de', '2014-03-19', NULL, 1, NULL),
-(2, 'Flo', 'dk', 'dk', '$2y$10$pN.pNONADESAVoII8buYsOJFGYzNgYwU8Q2XJpNi9cVrYCXAYkdyi', 1, 'flo@jo.de', NULL, NULL, 1, NULL);
+(2, 'Flo', 'dk', 'dk', '$2y$10$pN.pNONADESAVoII8buYsOJFGYzNgYwU8Q2XJpNi9cVrYCXAYkdyi', 1, 'flo@jo.de', NULL, NULL, 1, NULL),
+(3, 'whity', 'Stefan', 'Wolf', '$2y$10$3eCdznY.WGsasiVVOms5r.rVg.HNlwYgJ2dtwDt.zvideec74UH0K', 2, 'stefwolf@google.de', NULL, NULL, 1, NULL);
 
 --
 -- Constraints der exportierten Tabellen
@@ -311,6 +355,12 @@ ALTER TABLE `fangliste`
 ALTER TABLE `fangliste_eintrag`
   ADD CONSTRAINT `fanglisteeintrag_fangliste` FOREIGN KEY (`fangliste_id`) REFERENCES `fangliste` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   ADD CONSTRAINT `fanglisteeintrag_fischarten` FOREIGN KEY (`fisch_id`) REFERENCES `fischarten` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- Constraints der Tabelle `resetpassword`
+--
+ALTER TABLE `resetpassword`
+  ADD CONSTRAINT `resetpassword_user` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Constraints der Tabelle `termin_rolle`

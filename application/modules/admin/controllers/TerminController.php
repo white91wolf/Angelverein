@@ -1,6 +1,6 @@
 <?php
 
-class Backend_TerminController extends Zend_Controller_Action {
+class Admin_TerminController extends Zend_Controller_Action {
 
     protected $currentUserID;
     protected $currentUserName;
@@ -16,7 +16,7 @@ class Backend_TerminController extends Zend_Controller_Action {
     
 
     public function init() {
-        $this->isAdmin = false;
+        $this->isAdmin = true;
         $this->request = $this->getRequest();
         
         $this->currentUserID = Application_Plugin_Auth_AccessControl::getUserID();

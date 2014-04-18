@@ -1,6 +1,6 @@
 <?php
 
-class Backend_DienstplanController extends Zend_Controller_Action {
+class Admin_DienstplanController extends Zend_Controller_Action {
 
     protected $currentUserID;
     protected $currentUserName;
@@ -11,7 +11,7 @@ class Backend_DienstplanController extends Zend_Controller_Action {
     protected $isAdmin;
 
     public function init() {
-        $this->isAdmin = false;
+        $this->isAdmin = true;
         $this->request = $this->getRequest();
         $this->currentUserID = Application_Plugin_Auth_AccessControl::getUserID();
         $this->currentUserName = Application_Plugin_Auth_AccessControl::getUserName();
@@ -66,6 +66,16 @@ class Backend_DienstplanController extends Zend_Controller_Action {
         }
 
         $this->view->form = $form;
+    }
+
+    //TODO in adminbereich packen
+    public function confirmdienstAction() {
+        $confirmed = false;
+        if ($this->currentUserRole == 'Vorstand' && isset($_GET['dienstid'])) {
+            $dienstid = $this->request->getParam('dienstid');
+            $confirmed = $this->dienstTable->confirmDienstById($dienstid);
+        }
+        $this->view->confirmed = $confirmed;
     }
 
     private function getForm() {

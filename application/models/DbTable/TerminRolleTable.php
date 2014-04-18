@@ -15,7 +15,7 @@ class Application_Model_DbTable_TerminRolleTable extends Zend_Db_Table_Abstract 
 
         if (!empty($rolle_id)) {
             $select = $this->select()->where('rolle_id = ?', (int) $rolle_id);
-            $rows = $this->fetchAll($select);
+            $rows = $this->fetchAll($select)->toArray();
         }
 
         return $rows;

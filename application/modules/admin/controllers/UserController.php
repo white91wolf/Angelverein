@@ -1,31 +1,39 @@
 <?php
 
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+class Admin_UserController extends Zend_Controller_Action {
 
-/**
- * Description of AuthenticateController
- * TODO user objekt in session ablegen oder so
- * @author FloH
- */
-class AuthenticateController extends Zend_Controller_Action {
+    protected $currentUserID;
+    protected $currentUserName;
+    protected $currentUserRole;
     protected $userTable;
     protected $request;
 
     public function init() {
         $this->request = $this->getRequest();	
+        $this->currentUserID = Application_Plugin_Auth_AccessControl::getUserID();
+        $this->currentUserName = Application_Plugin_Auth_AccessControl::getUserName();
+        $this->currentUserRole = Application_Plugin_Auth_AccessControl::getUserRole();
 
         $this->userTable = new Application_Model_DbTable_UserTable();
     }
 
     public function indexAction() {
-        
+        if ($this->currentUserID > 0) {
+            $this->_redirect('backend/user/userid/' . $this->currentUserID);
+            //TODO entweder extra action oder alles in viewhelper packen
+            //$html = viewhelper->genHtmlKot()
+            //$this->view->html = $html
+        } else {
+            $this->_redirect('backend/user/login');
+        }
     }
-    
-    
+
+    public function logoutAction() {
+        Zend_Auth::getInstance()->clearIdentity();
+        $this->currentUserID = 0;
+        $this->_redirect('index');
+    }
+
     public function loginAction() {
         $form = new Application_Model_Forms_UserLoginForm();
 
@@ -83,34 +91,18 @@ class AuthenticateController extends Zend_Controller_Action {
         $this->view->form = $form;
         $this->view->registred = $registred;
     }
-    /*
-    public function recoverusernameAction() {
-        $form = new Application_Model_Forms_UserRecoverPasswordForm();
-        if ($this->request->isPost() && $form->isValid($_POST)) {
-            
-        }
+    
+    public function requiredloginAction() {
+        //TODO besseren text ausdenken
+        die("DIE MOTHERFUCKER DIE!!!");
     }
-    */
-    public function recoveruserpasswordAction() {
-        $form = new Application_Model_Forms_UserRecoverPasswordForm();
-        if ($this->request->isPost() && $form->isValid($_POST)) {
-            $rowsByMail = $this->userTable->getUserByMail($mail);
-                if (count($rowsByMail) > 0) {
-                    /*  //Config usw auslagern nur damit es iwo ist wos gebraucht wird
-                        $config = array('ssl' => 'tls', 'port' => 587, 'auth' => 'login', 'username' => 'armaserielist@gmail.com', 'password' => 'H0chschule0snabrueck');
-                        $smtpConnection = new Zend_Mail_Transport_Smtp('smtp.gmail.com', $config);
-                        Zend_Mail::setDefaultTransport($smtpConnection);
-                        $mail = new Zend_Mail();
-                        $mail->setBodyText('Ihr neues Passwort lautet: '.$newPw);
-                        $mail->setFrom('pw-recovery@serieslist.com', 'Neues Passwort!');
-                        $mail->addTo($userMail, $userName);
-                        $mail->setSubject('Neues Passwort');
-                        $mail->send();
-                     */
-                }  else {
-                    $form->getElement('email')->addError('Es wurde kein Nutzer zu dieser Mail Adresse gefunden!');
-                }
-            
+    
+    public function activateuserAction() {
+        $confirmed = false;
+        if ($this->currentUserRole == 'Vorstand' && isset($_GET['userid'])) {
+            $userid = $this->request->getParam('dienstid');
+            $confirmed = $this->userTable->activateUser($userid);
         }
+        $this->view->confirmed = $confirmed;
     }
 }

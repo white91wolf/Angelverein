@@ -86,5 +86,24 @@ class Application_Model_DbTable_UserTable extends Zend_Db_Table_Abstract {
 
         return $this->fetchAll($select)->toArray();
     }
+    
+    public function activateUser($id) {
+        $rowscount = 0;
+        
+        if(!empty($id)){
+            $data = array(
+                'freigeschaltet' => true
+            );
+
+            $where = $this->getAdapter()->quoteInto('id = ?', $id);
+            
+            $rowscount = $this->update($data, $where);
+            
+            
+        }
+        
+        return ($rowscount == 1);
+        
+    }
 
 }
