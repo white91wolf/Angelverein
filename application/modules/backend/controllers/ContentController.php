@@ -27,7 +27,7 @@ class Backend_ContentController extends Zend_Controller_Action {
         // TODO $this->view->page = InlineModules_Bla::EvocateModule($page);
         $this->view->page = $page;
     }
-
+    
     public function editAction() {
         $request = $this->getRequest();
         $content = null;
@@ -83,5 +83,4 @@ class Backend_ContentController extends Zend_Controller_Action {
         $this->view->form = $form;
         $this->view->type_id = $type_id;
     }
-
 }

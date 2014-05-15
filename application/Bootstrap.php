@@ -9,7 +9,7 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap {
         $front = $this->getResource('frontController');
         $front->setParam('useDefaultControllerAlways', true);
     }
-    
+
     protected function _initConfig() {
         $config = new Zend_Config_Ini(APPLICATION_PATH."/configs/config.ini");
         Zend_Registry::set('appConfig', $config);

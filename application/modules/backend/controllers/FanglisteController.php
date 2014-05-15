@@ -77,7 +77,6 @@ class Backend_FanglisteController extends Zend_Controller_Action {
                 }
             }
         }
-        var_dump($form);die();
         $this->view->form = $form;
     }
 
@@ -126,8 +125,9 @@ class Backend_FanglisteController extends Zend_Controller_Action {
             $gewaesser = $form->getValue('gewaesser');
 
             $fanglistId = $this->fanglisteTable->createNewContent($this->currentUserID, $date, $gewaesser);
-
-            $this->createFishEntriesFromForm($form);
+            
+            $this->createFishEntriesFromForm($form, $fanglistId);
+            redirect();
         }
 
         $this->view->form = $form;
@@ -143,15 +143,15 @@ class Backend_FanglisteController extends Zend_Controller_Action {
         return $form;
     }
 
-    public function createFishEntriesFromForm($form = null) {
-        if(!empty($form)){
+    public function createFishEntriesFromForm($form = null, $fanglisteId = null) {
+        if(!(empty($form) || empty($fanglisteId)) && $fanglisteId > 0){
             $fishtyp = $form->getValue('fishType');
             $count = $form->getValue('count_fishes');
             $gewicht = $form->getValue('weight');
-
+            
             $count_form = count($fishtyp); 
             for ($i = 0; $i < $count_form; $i++) {
-                $this->fanglisteEintragTable->createNewContent($fishtyp[$i], $count[$i], $gewicht[$i], $fanglistId);
+                $this->fanglisteEintragTable->createNewContent($fishtyp[$i], $count[$i], $gewicht[$i], $fanglisteId);
             }
         }
     }

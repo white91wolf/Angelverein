@@ -1,0 +1,13 @@
+<?php
+$this->headTitle("User-Aktivierung");
+?>
+<h2>User-Aktivierung</h2>
+<div class="subcontent">
+    <?php
+    if($this->confirmed){
+        echo 'User wurde erfolgreich freigeschaltet !';
+    }  else {
+        echo 'Es ist ein Fehler aufgetreten !';
+    }
+    ?>
+</div>

@@ -23,7 +23,7 @@ class Application_Model_DbTable_UserTable extends Zend_Db_Table_Abstract {
 
         if (!empty($name)) {
             $select = $this->select()->where('username = ?', $name);
-            $rows = $this->fetchAll($select);
+            $rows = $this->fetchAll($select)->current();
         }
 
         return $rows;

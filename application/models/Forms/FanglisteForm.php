@@ -20,7 +20,7 @@ class Application_Model_Forms_FanglisteForm extends Zend_Form {
             'isArray' => true,
             'required' => true)
         );
-
+        
         foreach ($fishArr as $value) {
             $ffish->addMultiOption($value['id'], $value['name']);
         }
@@ -71,7 +71,7 @@ class Application_Model_Forms_FanglisteForm extends Zend_Form {
 
         // change ID
         foreach ($group as $element) {
-            $element->setAttrib('id', $element->getId() . '_' . $this->counter);
+            $this->setIdOfElement($element);
         }
         ++$this->counter;
 
@@ -119,7 +119,7 @@ class Application_Model_Forms_FanglisteForm extends Zend_Form {
             'required' => true)
         );
         //TODO kommaaaaazahlen maybe
-        $fweight->addValidator(new Zend_Validate_Int());
+        //$fweight->addValidator(new Zend_Validate_Int());
 
         return $this->setIdOfElement($fweight);
     }
@@ -131,7 +131,7 @@ class Application_Model_Forms_FanglisteForm extends Zend_Form {
             'required' => true)
         );
 
-        $fcount->addValidator(new Zend_Validate_Int());
+        //$fcount->addValidator(new Zend_Validate_Int());
 
         return $this->setIdOfElement($fcount);
     }

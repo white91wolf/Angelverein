@@ -74,5 +74,14 @@ class Backend_DienstplanController extends Zend_Controller_Action {
 
         return $form;
     }
+    
+    public function confirmdienstAction() {
+        $confirmed = false;
+        if ($this->currentUserRole == 'Vorstand' && isset($_GET['dienstid'])) {
+            $dienstid = $this->request->getParam('dienstid');
+            $confirmed = $this->dienstTable->confirmDienstById($dienstid);
+        }
+        $this->view->confirmed = $confirmed;
+    }
 
 }

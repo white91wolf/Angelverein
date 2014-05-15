@@ -33,39 +33,24 @@ class Backend_TerminController extends Zend_Controller_Action {
     }
 
     public function indexAction() {
-        $terminIds = $this->terminRoleTable->getAllByRolleId($this->currentUserRoleId);
-        //jetzt jede id von db holen is aba kacka iwie mit join da is aba flo der pro xD
+        $termine = $this->terminTable->getAllByRolleId($this->currentUserRoleId);
+        $this->view->termine = $termine;
         
     }
+    
+    //TODO ausprogrammieren
+    public function answerAction() {
+        //auf termin mit dabei oder ablehnen antworten
+    }
 
-    /*
-      public function createAction() {
-     * editAction(null);
-     * }
-     * 
-     * public function editAction() {
-     * if(getgedönst) {
-     * //usw
-     * $this->createAction($formData);
-     * }
-     * 
-     * public function createAction($formData = null) {
-     * if(!empty($formdata)) {
-     * eintragen bla
-     * }
-     * $muh = "createAction";
-     * $this->$muh()
-     */
-
-//TODO in adminbereich auslagern
-    public function editAction() {
+ public function editAction() {
         $form = $this->getForm();
 
         if (($this->request->isGet() || $this->request->isPost()) && isset($_GET['terminid'])) {
             $terminid = $this->request->getParam('terminid');
             $termin = $this->terminTable->getById($terminid);
 
-            if (!empty($termin) && ($this->isAdmin || $this->currentUserRole == 'Vorstand')) {
+            if (!empty($termin)) {
                 if ($this->request->isPost() && $form->isValid($_POST)) {
                     $termin->datum = $form->getValue('date');
                     $termin->beschreibung = $form->getValue('description');

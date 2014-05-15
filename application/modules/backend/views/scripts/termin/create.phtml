@@ -1,4 +1,8 @@
 <?php
+    $this->appendResource(Zend_Registry::get('appConfig')->resource->js->datetimepicker);
+    $this->appendResource(Zend_Registry::get('appConfig')->resource->js->ourdatetimepickersettings);
+    $this->appendStylesheet(Zend_Registry::get('appConfig')->resource->css->datetimepicker);
+    
     $this->headTitle("Termin erstellen");
 ?>
 

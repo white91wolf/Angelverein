@@ -9,6 +9,20 @@ class Application_Model_DbTable_TerminTable extends Zend_Db_Table_Abstract {
 
         return $rows;
     }
+    
+    public function getAllByRolleId($rolle_id = null) {
+        $rows = null;
+
+        if (!empty($rolle_id)) {
+            $select = $this->select(Zend_Db_Table::SELECT_WITH_FROM_PART)
+                    ->setIntegrityCheck(false)              
+                    ->join('termin_rolle', $this->_name.'.id = termin_rolle.termin_id')
+                    ->where('termin_rolle.rolle_id = ?', $rolle_id);
+            $rows = $this->fetchAll($select)->toArray();
+        }
+
+        return $rows;
+    }
 
     public function getAllNextEntriesByDate($datum = null) {
         $rows = null;

@@ -27,14 +27,22 @@ class Application_Model_Forms_TerminForm extends Zend_Form {
 
         //----------------------------------------------------------------------
 
-        $date = new ZendX_JQuery_Form_Element_DatePicker('date', array(
+        /*$date = new ZendX_JQuery_Form_Element_DatePicker('date', array(
             'label' => 'Termindatum',
             'jQueryParams' => array('dateFormat' => 'dd.mm.yy'),
             'required' => true
         ));
 
         $date->addFilter('StripTags');
-        $this->addElement($date);
+        $this->addElement($date);*/
+        
+        $datetime = new Zend_Form_Element_Text('date_timepicker', array(
+                'label' => 'Zeitpunkt des Termins',
+                'required' => true
+                )
+                );
+        $this->addElement($datetime);
+        //TODO Timevalidator http://stackoverflow.com/questions/2185608/how-to-create-a-datetime-validator-in-a-zend-framework-form  http://framework.zend.com/manual/1.11/en/zend.validate.set.html (ganz unten)
 
         //TODO Timepicker vlt mit in date intigriert: http://www.binpress.com/app/demo/app/85
 

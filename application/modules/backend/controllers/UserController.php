@@ -27,17 +27,13 @@ class Backend_UserController extends Zend_Controller_Action {
             $this->_redirect('backend/user/login');
         }
     }
-
-    public function logoutAction() {
-        Zend_Auth::getInstance()->clearIdentity();
-        $this->currentUserID = 0;
-        $this->_redirect('index');
-    }
-
     
-    
-    public function requiredloginAction() {
-        //TODO besseren text ausdenken
-        die("DIE MOTHERFUCKER DIE!!!");
+        public function activateuserAction() {
+        $confirmed = false;
+        if (isset($_GET['userid'])) {
+            $userid = $this->request->getParam('userid');
+            $confirmed = $this->userTable->activateUser($userid);
+        }
+        $this->view->confirmed = $confirmed;
     }
 }

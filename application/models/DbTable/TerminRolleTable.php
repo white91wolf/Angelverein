@@ -10,7 +10,7 @@ class Application_Model_DbTable_TerminRolleTable extends Zend_Db_Table_Abstract 
         return $rows;
     }
 
-    public function getAllByRolleId($rolle_id = null) {
+    public function getAllTerminIdsByRolleId($rolle_id = null) {
         $rows = null;
 
         if (!empty($rolle_id)) {
