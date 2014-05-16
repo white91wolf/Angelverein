@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: 127.0.0.1
--- Erstellungszeit: 18. Apr 2014 um 18:28
+-- Erstellungszeit: 16. Mai 2014 um 17:36
 -- Server Version: 5.5.32
 -- PHP-Version: 5.4.16
 
@@ -113,14 +113,15 @@ CREATE TABLE IF NOT EXISTS `fangliste` (
   KEY `datum` (`datum`),
   KEY `user_id_2` (`user_id`),
   KEY `gewaesser_id` (`gewaesser_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=5 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=15 ;
 
 --
 -- Daten für Tabelle `fangliste`
 --
 
 INSERT INTO `fangliste` (`id`, `user_id`, `datum`, `gewaesser_id`) VALUES
-(4, 2, '2014-04-03 19:47:15', 1);
+(4, 2, '2014-04-03 19:47:15', 1),
+(14, 3, '2014-05-24 22:00:00', 4);
 
 -- --------------------------------------------------------
 
@@ -137,14 +138,16 @@ CREATE TABLE IF NOT EXISTS `fangliste_eintrag` (
   PRIMARY KEY (`id`),
   KEY `fisch_id` (`fisch_id`),
   KEY `fangliste_id` (`fangliste_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=2 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=8 ;
 
 --
 -- Daten für Tabelle `fangliste_eintrag`
 --
 
 INSERT INTO `fangliste_eintrag` (`id`, `fisch_id`, `anzahl`, `gewicht`, `fangliste_id`) VALUES
-(1, 2, 12, 21, 4);
+(1, 2, 12, 21, 4),
+(6, 4, 21, 30, 14),
+(7, 2, 50, 36, 14);
 
 -- --------------------------------------------------------
 
@@ -240,14 +243,15 @@ CREATE TABLE IF NOT EXISTS `termin` (
   `name` varchar(255) NOT NULL,
   `anmeldung` tinyint(1) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=16 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=17 ;
 
 --
 -- Daten für Tabelle `termin`
 --
 
 INSERT INTO `termin` (`id`, `erstelldatum`, `datum`, `uhrzeit`, `beschreibung`, `name`, `anmeldung`) VALUES
-(15, '2014-04-16 16:01:01', '2014-04-28', '00:00:00', 'asd213', '123Testtermin', 1);
+(15, '2014-04-16 16:01:01', '2014-04-28', '00:00:00', 'asd213', '123Testtermin', 1),
+(16, '2014-05-15 16:51:02', '2014-05-30', '00:00:00', 'ein stück scheiße', 'One Piece', 1);
 
 -- --------------------------------------------------------
 
@@ -262,14 +266,16 @@ CREATE TABLE IF NOT EXISTS `termin_rolle` (
   PRIMARY KEY (`id`),
   KEY `rolle_id` (`rolle_id`),
   KEY `termin_id` (`termin_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=11 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=13 ;
 
 --
 -- Daten für Tabelle `termin_rolle`
 --
 
 INSERT INTO `termin_rolle` (`id`, `rolle_id`, `termin_id`) VALUES
-(10, 1, 15);
+(10, 1, 15),
+(11, 1, 16),
+(12, 2, 16);
 
 -- --------------------------------------------------------
 
@@ -308,7 +314,7 @@ CREATE TABLE IF NOT EXISTS `user` (
   `aboutme` varchar(510) DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `rolle_id` (`rolle_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=4 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=5 ;
 
 --
 -- Daten für Tabelle `user`
@@ -317,7 +323,8 @@ CREATE TABLE IF NOT EXISTS `user` (
 INSERT INTO `user` (`id`, `username`, `vorname`, `nachname`, `password`, `rolle_id`, `email`, `gebutsdatum`, `userimage`, `freigeschaltet`, `aboutme`) VALUES
 (1, 'admin', 'admin', 'admin', '123456\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0', 2, 'admin@admin.de', '2014-03-19', NULL, 1, NULL),
 (2, 'Flo', 'dk', 'dk', '$2y$10$pN.pNONADESAVoII8buYsOJFGYzNgYwU8Q2XJpNi9cVrYCXAYkdyi', 1, 'flo@jo.de', NULL, NULL, 1, NULL),
-(3, 'whity', 'Stefan', 'Wolf', '$2y$10$3eCdznY.WGsasiVVOms5r.rVg.HNlwYgJ2dtwDt.zvideec74UH0K', 2, 'stefwolf@google.de', NULL, NULL, 1, NULL);
+(3, 'whity', 'Stefan', 'Wolf', '$2y$10$3eCdznY.WGsasiVVOms5r.rVg.HNlwYgJ2dtwDt.zvideec74UH0K', 2, 'stefwolf@google.de', NULL, NULL, 1, NULL),
+(4, 'testibus', 'bus', 'test', '$2y$10$5eXKcdaVhMiXjGZEbLoHCuvrsT1/tbbJ10B1vZeVCxnVx0e8IVCYW', 1, 'test@test.de', NULL, NULL, 1, NULL);
 
 --
 -- Constraints der exportierten Tabellen
